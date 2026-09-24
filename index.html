@@ -21,6 +21,105 @@
   .view[hidden] { display: none; }
   .view-root { display: block; }
 
+  /* ═══════ Aurelius layer — design tokens ═══════ */
+  :root {
+    --au-bg:#faf9f8; --au-surface:#fff; --au-border:#edebe9; --au-text:#201f1e;
+    --au-muted:#605e5c; --au-accent:#0f6cbd; --au-accent2:#2899f5; --au-grid:#e1dfdd;
+    --au-ok-bg:#dff6dd; --au-ok-fg:#0b6a0b; --au-warn-bg:#fff4ce; --au-warn-fg:#8a6d00; --au-bad-bg:#fde7e9; --au-bad-fg:#a4262c;
+  }
+  :root[data-theme="dark"] {
+    --au-bg:#1b1a19; --au-surface:#252423; --au-border:#3b3a39; --au-text:#f3f2f1;
+    --au-muted:#a19f9d; --au-accent:#2899f5; --au-accent2:#3aa0f3; --au-grid:#3b3a39;
+    --au-ok-bg:#0b3d0b; --au-ok-fg:#8fd98f; --au-warn-bg:#4a3c00; --au-warn-fg:#f2d16b; --au-bad-bg:#4a1417; --au-bad-fg:#f1a7ac;
+  }
+  :root[data-theme="dark"] body { background:var(--au-bg); color:var(--au-text); }
+  :root[data-theme="dark"] .main { background:var(--au-bg); }
+  :root[data-theme="dark"] .quick-links { background:var(--au-surface); border-color:var(--au-border); }
+  :root[data-theme="dark"] .nav-bar { background:var(--au-surface); border-color:var(--au-border); }
+  :root[data-theme="dark"] .kpi-card,
+  :root[data-theme="dark"] .agent-tile,
+  :root[data-theme="dark"] .agent-drawer,
+  :root[data-theme="dark"] .biz-card { background:var(--au-surface); color:var(--au-text); border-color:var(--au-border); }
+  :root[data-theme="dark"] .page-footer { background:var(--au-surface); color:var(--au-muted); }
+
+  /* BC connection indicator */
+  .bc-indicator { display:flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-radius:14px;
+    font-size:11px; color:#fff; background:rgba(255,255,255,0.12); cursor:pointer; white-space:nowrap; }
+  .bc-indicator:hover { background:rgba(255,255,255,0.2); }
+  .bc-dot { width:7px; height:7px; border-radius:50%; background:#13a10e; box-shadow:0 0 0 3px rgba(19,161,14,0.25); }
+  .bc-indicator.bc-auth .bc-dot { background:#ffb900; box-shadow:0 0 0 3px rgba(255,185,0,0.25); animation:bcpulse 0.8s infinite; }
+  @keyframes bcpulse { 50% { opacity:0.4; } }
+
+  /* nav / quick-link active route */
+  .nav-tab.is-active { color:var(--au-accent); border-bottom:2px solid var(--au-accent); }
+  .quick-link.is-active { font-weight:600; color:var(--au-accent); }
+
+  /* ═══════ Aurelius components ═══════ */
+  .au-section-title { font-size:16px; font-weight:600; margin:6px 0 12px; color:var(--au-text); }
+  .au-muted { color:var(--au-muted); font-size:12px; }
+  .au-kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+  .au-kpi { background:var(--au-surface); border:1px solid var(--au-border); border-radius:4px; padding:12px 14px; }
+  .au-kpi-label { font-size:11px; color:var(--au-muted); text-transform:uppercase; letter-spacing:.3px; }
+  .au-kpi-value { font-size:22px; font-weight:600; color:var(--au-text); margin-top:4px; }
+  .au-kpi-sub { font-size:11px; color:var(--au-muted); margin-top:2px; }
+  .au-chart-row { display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:16px; }
+  .au-panel { background:var(--au-surface); border:1px solid var(--au-border); border-radius:4px; margin-bottom:16px; }
+  .au-panel-head { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--au-border); }
+  .au-panel-head h3 { font-size:13px; font-weight:600; flex:1; color:var(--au-text); }
+  .au-panel-body { padding:14px; }
+  .au-chart { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .au-legend { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+  .au-leg { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--au-muted); }
+  .au-leg i { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .au-btn { border:1px solid var(--au-border); background:var(--au-surface); color:var(--au-text); border-radius:3px;
+    padding:6px 12px; font-size:12px; cursor:pointer; }
+  .au-btn:hover { background:var(--au-bg); }
+  .au-btn.primary { background:var(--au-accent); border-color:var(--au-accent); color:#fff; }
+  .au-btn.primary:hover { filter:brightness(1.08); }
+  .au-btn.ghost { border-color:transparent; background:transparent; }
+  .au-input, .au-select { border:1px solid var(--au-border); background:var(--au-surface); color:var(--au-text);
+    border-radius:3px; padding:7px 10px; font-size:13px; }
+  .au-input { flex:1; }
+  .au-label { display:block; font-size:12px; color:var(--au-muted); margin-bottom:6px; }
+  .au-tool-row { display:flex; gap:8px; margin:8px 0 12px; }
+  .au-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .au-chip { display:inline-block; padding:5px 10px; border-radius:14px; background:var(--au-bg);
+    border:1px solid var(--au-border); font-size:12px; color:var(--au-text); margin:0 4px 4px 0; }
+  .au-chip.clickable { cursor:pointer; }
+  .au-chip.clickable:hover { border-color:var(--au-accent); color:var(--au-accent); }
+  .au-tool-result { background:var(--au-bg); border:1px solid var(--au-border); border-radius:4px; padding:12px; }
+  .au-result-summary { font-size:13px; color:var(--au-text); margin-bottom:6px; }
+  .au-result-bc { font-size:12px; color:var(--au-accent); font-family:ui-monospace,Menlo,monospace; }
+  .au-result-meta { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .au-badge { font-size:11px; padding:3px 8px; border-radius:10px; background:var(--au-accent); color:#fff; }
+  .au-related { margin-top:10px; }
+  .au-related-title { font-size:11px; color:var(--au-muted); text-transform:uppercase; margin-bottom:6px; }
+  .au-log-item { font-size:12px; color:var(--au-text); padding:8px 0; border-bottom:1px solid var(--au-border); }
+  .au-log-item:last-child { border-bottom:none; }
+  .au-ws-head { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .au-ws-head h2 { font-size:18px; font-weight:600; color:var(--au-text); }
+  .au-ws-tag { font-size:12px; color:var(--au-muted); }
+  .au-ws-bc { margin-left:auto; font-size:11px; color:var(--au-accent); font-family:ui-monospace,Menlo,monospace; }
+  .au-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .au-table th { text-align:left; padding:8px 10px; background:var(--au-bg); color:var(--au-muted);
+    border-bottom:1px solid var(--au-border); font-weight:600; text-transform:uppercase; font-size:10px; letter-spacing:.3px; }
+  .au-table td { padding:8px 10px; border-bottom:1px solid var(--au-border); color:var(--au-text); }
+  .au-table tr.au-empty td { text-align:center; color:var(--au-muted); padding:18px; }
+  .au-status.ok { color:var(--au-ok-fg); } .au-status.warn { color:var(--au-warn-fg); } .au-status.bad { color:var(--au-bad-fg); }
+  .au-protos { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .au-tabs { display:flex; gap:4px; }
+  .au-tab { border:1px solid var(--au-border); background:var(--au-surface); color:var(--au-text);
+    padding:6px 12px; font-size:12px; border-radius:3px 3px 0 0; cursor:pointer; }
+  .au-tab.active { background:var(--au-accent); border-color:var(--au-accent); color:#fff; }
+  .au-erp-toolbar { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:0; }
+  .au-erp-actions { display:flex; gap:8px; margin-bottom:8px; }
+  .au-pipeline { display:flex; flex-wrap:wrap; gap:8px; }
+  .au-stage { flex:1; min-width:120px; border:1px solid var(--au-border); border-radius:4px; padding:10px;
+    font-size:11px; color:var(--au-muted); background:var(--au-bg); position:relative; transition:all .2s; }
+  .au-stage.active { border-color:var(--au-accent); color:var(--au-accent); box-shadow:0 0 0 2px rgba(15,108,189,0.15); }
+  .au-stage.done { border-color:#13a10e; color:#0b6a0b; }
+  .au-stage[data-conf]::after { content:attr(data-conf); position:absolute; top:4px; right:6px; font-size:9px; color:var(--au-accent); }
+
   /* ═══════════════════════════════════════════════
      TOP HEADER BAR (D365 black bar)
   ═══════════════════════════════════════════════ */
@@ -1085,6 +1184,10 @@
     <span class="d365-title">Dynamics 365 Business Central</span>
   </div>
   <div class="top-bar-right">
+    <div class="bc-indicator bc-live" id="bcIndicator" onclick="bcSyncNow()" title="Business Central connection — click to Sync Now">
+      <span class="bc-dot"></span><span class="bc-label">Live from Business Central</span>
+    </div>
+    <div class="top-icon" id="themeToggle" onclick="toggleTheme()" title="Toggle dark / light">☾</div>
     <div class="top-icon" onclick="toast('✓ Page saved to Favourites')" title="Save to favourites">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2h8a1 1 0 0 1 1 1v11.293l-5-3.75-5 3.75V3a1 1 0 0 1 1-1zm0-1a2 2 0 0 0-2 2v13l6-4.5 6 4.5V3a2 2 0 0 0-2-2H4z"/></svg>
     </div>
@@ -1211,11 +1314,15 @@
   </div>
   <div class="nav-row">
     <div class="nav-tabs" id="navTabs">
-      <div class="nav-tab active" onclick="setTab(this,'Royalties')">Royalties <span class="caret">▾</span></div>
-      <div class="nav-tab" onclick="setTab(this,'Collections')">Collections <span class="caret">▾</span></div>
-      <div class="nav-tab" onclick="setTab(this,'Billing & Rebate')">Billing &amp; Rebate <span class="caret">▾</span></div>
-      <div class="nav-tab" onclick="setTab(this,'Tax & Compliance')">Tax &amp; Compliance <span class="caret">▾</span></div>
-      <div class="nav-tab" onclick="setTab(this,'Controls')">Controls <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/dashboard" onclick="navigate('#/dashboard')">Dashboard</div>
+      <div class="nav-tab" data-route="#/orchestrator" onclick="navigate('#/orchestrator')">Orchestrator <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/agent/royalty" onclick="navigate('#/agent/royalty')">Royalties <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/agent/collections" onclick="navigate('#/agent/collections')">Collections <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/agent/billing" onclick="navigate('#/agent/billing')">Billing &amp; Rebate <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/agent/tax" onclick="navigate('#/agent/tax')">Tax &amp; Compliance <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/agent/controls" onclick="navigate('#/agent/controls')">Controls <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/erp" onclick="navigate('#/erp')">BC Explorer <span class="caret">▾</span></div>
+      <div class="nav-tab" data-route="#/audit" onclick="navigate('#/audit')">Audit Log <span class="caret">▾</span></div>
       <div class="nav-tab-sep"></div>
       <div class="nav-tab" onclick="toast('Additional menu opened')">☰</div>
     </div>
@@ -1224,17 +1331,17 @@
 
 <!-- ═══════════ QUICK LINKS ═══════════ -->
 <div class="quick-links">
-  <a class="quick-link active" href="#" onclick="setQuick(this,event)">All Agents</a>
+  <a class="quick-link" href="#/dashboard" data-route="#/dashboard" onclick="navigate('#/dashboard');return false;">All Agents</a>
   <span class="ql-sep">|</span>
-  <a class="quick-link" href="#" onclick="setQuick(this,event)">Active Now</a>
+  <a class="quick-link" href="#/orchestrator" data-route="#/orchestrator" onclick="navigate('#/orchestrator');return false;">Orchestrator</a>
   <span class="ql-sep">|</span>
-  <a class="quick-link" href="#" onclick="setQuick(this,event)">Alerts</a>
+  <a class="quick-link" href="#/erp" data-route="#/erp" onclick="navigate('#/erp');return false;">BC Explorer</a>
   <span class="ql-sep">|</span>
-  <a class="quick-link" href="#" onclick="setQuick(this,event)">Reports</a>
+  <a class="quick-link" href="#/audit" data-route="#/audit" onclick="navigate('#/audit');return false;">Audit Trail</a>
   <span class="ql-sep">|</span>
-  <a class="quick-link" href="#" onclick="setQuick(this,event)">Audit Trail</a>
+  <a class="quick-link" href="#" onclick="toast('Filter: Alerts');return false;">Alerts</a>
   <span class="ql-sep">|</span>
-  <a class="quick-link" href="#" onclick="setQuick(this,event)">Agent Config</a>
+  <a class="quick-link" href="#/orchestrator" data-route="#/orchestrator" onclick="navigate('#/orchestrator');return false;">Agent Config</a>
 </div>
 
 <!-- ═══════════ VIEWS ═══════════ -->
@@ -1759,6 +1866,492 @@
 
   /* ═════════ Global esc key ═════════ */
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllDropdowns(); });
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   AURELIUS AGENTIC LAYER — router, data, components, views
+   (appended layer over the original D365 BC mockup)
+   ════════════════════════════════════════════════════════════ */
+
+/* ═════════ Tiny DOM helper ═════════ */
+function el(tag, attrs, ...children) {
+  const n = document.createElement(tag);
+  if (attrs) for (const k in attrs) {
+    if (k === 'class') n.className = attrs[k];
+    else if (k === 'html') n.innerHTML = attrs[k];
+    else if (k.startsWith('on') && typeof attrs[k] === 'function') n.addEventListener(k.slice(2), attrs[k]);
+    else if (attrs[k] != null) n.setAttribute(k, attrs[k]);
+  }
+  for (const c of children) {
+    if (c == null) continue;
+    n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  }
+  return n;
+}
+
+/* ═════════ Mock DATA (BC reference IDs reused) ═════════ */
+const DATA = {
+  env: 'PROD-EMEA-01',
+  companies: ['Aurelius Media Group','The Trade Desk Inc','Publicis Media','Spark Foundry','Zenith Optimedia','Meridian Broadcasting','Horizon Digital','Vortex Studios','Spotify AB'],
+  kpis: {
+    txnOrchestrated: '18,442',
+    valueUnderAutomation: '$3.4M',
+    straightThrough: '94%',
+    avgConfidence: '0.93'
+  },
+  invoices: [
+    { id:'INV-77120', vendor:'Publicis Media',       amount:'$128,400', status:'On Hold',   exception:'Price variance',       terms:'Net-45' },
+    { id:'INV-77133', vendor:'Spark Foundry',        amount:'$64,900',  status:'Matched',   exception:'—',                    terms:'Net-30' },
+    { id:'INV-77140', vendor:'Zenith Optimedia',     amount:'$212,050', status:'On Hold',   exception:'Missing GRN',          terms:'Net-45' },
+    { id:'INV-77155', vendor:'Meridian Broadcasting',amount:'$47,300',  status:'Escalated', exception:'Quantity mismatch',    terms:'Net-15' },
+    { id:'SI-90233',  vendor:'The Trade Desk Inc',   amount:'$305,000', status:'Posted',    exception:'—',                    terms:'Net-30' },
+    { id:'SI-90295',  vendor:'Horizon Digital',      amount:'$88,750',  status:'Disputed',  exception:'Duplicate suspected',  terms:'Net-30' }
+  ],
+  vatEntries: [
+    { id:'VAT-3391', jurisdiction:'Germany (DE)',     type:'Reverse charge', rate:'19%', base:'$305,000', status:'Verified' },
+    { id:'VAT-3392', jurisdiction:'Ireland (IE)',     type:'Standard',       rate:'23%', base:'$88,750',  status:'Verified' },
+    { id:'VAT-3393', jurisdiction:'France (FR)',      type:'Standard',       rate:'20%', base:'$128,400', status:'Pending'  },
+    { id:'VAT-3394', jurisdiction:'Sweden (SE)',      type:'Standard',       rate:'25%', base:'$64,900',  status:'Verified' },
+    { id:'VAT-3395', jurisdiction:'Netherlands (NL)', type:'Reverse charge', rate:'21%', base:'$212,050', status:'Pending'  }
+  ],
+  ledger: [
+    { id:'V-1042', customer:'Meridian Broadcasting', amount:'$47,300',  balance:'$47,300',  due:'2026-09-02', terms:'Net-15', status:'Overdue' },
+    { id:'V-1058', customer:'Publicis Media',        amount:'$128,400', balance:'$0',       due:'2026-08-20', terms:'Net-45', status:'Paid'    },
+    { id:'V-1071', customer:'Spark Foundry',         amount:'$64,900',  balance:'$64,900',  due:'2026-10-05', terms:'Net-30', status:'Open'    },
+    { id:'V-1093', customer:'Zenith Optimedia',      amount:'$212,050', balance:'$212,050', due:'2026-09-14', terms:'Net-45', status:'Overdue' },
+    { id:'V-1120', customer:'Horizon Digital',       amount:'$88,750',  balance:'$44,375',  due:'2026-09-28', terms:'Net-30', status:'Open'    },
+    { id:'V-1177', customer:'The Trade Desk Inc',    amount:'$305,000', balance:'$0',       due:'2026-08-30', terms:'Net-30', status:'Paid'    }
+  ],
+  holdQueue: [
+    { id:'INV-77120', vendor:'Publicis Media',        exception:'Price variance',    variance:'+4.2%',  age:'3d',  action:'Review price' },
+    { id:'INV-77140', vendor:'Zenith Optimedia',      exception:'Missing GRN',       variance:'n/a',    age:'6d',  action:'Await receipt' },
+    { id:'INV-77155', vendor:'Meridian Broadcasting', exception:'Quantity mismatch', variance:'-2 units',age:'1d', action:'Escalate' },
+    { id:'SI-90295',  vendor:'Horizon Digital',       exception:'Duplicate suspected',variance:'n/a',   age:'2d',  action:'Flag dup' }
+  ],
+  audit: [
+    { id:'AUD-8836', action:'3-way match cleared on INV-77133',        classification:'AP Exception',      agent:'AP Exception Agent',   confidence:'0.97', override:'No',  bc:'GET /purchaseInvoices',      approver:'Auto', ts:'2026-09-24 08:12' },
+    { id:'AUD-8837', action:'VAT journal VAT-3391 posted',              classification:'Tax & Compliance',  agent:'Tax & Compliance Agent',confidence:'0.96', override:'No',  bc:'POST /journals',             approver:'J. Okafor', ts:'2026-09-24 08:44' },
+    { id:'AUD-8838', action:'Q2 volume rebate recomputed (Publicis)',   classification:'Billing & Rebate',  agent:'Billing & Rebate Agent',confidence:'0.95', override:'No',  bc:'POST /salesCreditMemos',     approver:'Auto', ts:'2026-09-24 09:03' },
+    { id:'AUD-8839', action:'Dunning L2 issued to Meridian',            classification:'Collections',       agent:'Collections & Credit Agent',confidence:'0.93',override:'Yes', bc:'GET /customerLedgerEntries', approver:'A. Ruiz', ts:'2026-09-24 09:20' },
+    { id:'AUD-8840', action:'Vendor payment status answered (Spark)',   classification:'Vendor Query',      agent:'Vendor Query Assistant',confidence:'0.90', override:'No',  bc:'GET /vendorPayments',        approver:'Auto', ts:'2026-09-24 09:41' },
+    { id:'AUD-8841', action:'Access review — no SoD anomalies',         classification:'Controls',          agent:'Controls & Access Agent',confidence:'0.99',override:'No',  bc:'GET /permissionSets',        approver:'Auto', ts:'2026-09-24 10:02' }
+  ],
+  agents: {
+    royalty: { id:'royalty', name:'Royalty & Creator Agent', tagline:'Statement reconciliation · Contract compliance · Creator payouts', bc:'GET /royaltyStatements',
+      kpis:[['Statements Reconciled','12'],['Discrepancies','1'],['Creators','4,471'],['Match Rate','98%']],
+      tool:{ title:'Statement Reconciliation', selectLabel:'Select a creator statement', options:['Creator #4471 · Q2 statement','Creator #4472 · Q2 statement','Creator #4480 · Q2 statement'] },
+      log:['Reconciled 12 statements against contract v2.1','Flagged Creator #4471 — $2,140 discrepancy vs contract','Queued payout batch for 4,470 creators'] },
+    collections: { id:'collections', name:'Collections & Credit Agent', tagline:'Receivables dunning · Credit risk · Promise-to-pay', bc:'GET /customerLedgerEntries',
+      kpis:[['Open Dunning Cases','14'],['Overdue Recovered (QTD)','$612K'],['Avg. DSO','41d'],['Promises-to-Pay','9']],
+      tool:{ title:'Dunning & Promise-to-Pay Generator', selectLabel:'Select a customer ledger', options:['Meridian Broadcasting · $47,300 overdue','Zenith Optimedia · $212,050 overdue','Horizon Digital · $44,375 open'] },
+      log:['Retrieved Cust. Ledger aging for Meridian — 22d overdue','Issued Dunning L2 and logged promise-to-pay','Recomputed DSO across EMEA book'] },
+    billing: { id:'billing', name:'Billing & Rebate Agent', tagline:'Media rebates · Volume tiers · Dynamic invoicing', bc:'POST /salesCreditMemos',
+      kpis:[['Rebate Programs','8'],['Rebates Reconciled (QTD)','$156K'],['Invoices Generated','247'],['Reconciliation Match','96%']],
+      tool:{ title:'Rebate Reconciliation Tool', selectLabel:'Select a media buy program', options:['Publicis · Q2 volume tier','Zenith · Q2 volume tier','Spark Foundry · Q2 volume tier'] },
+      log:['Recalculated Q2 volume rebate for Publicis buy','Generated $84,500 credit note draft','Matched 96% of accruals to BC ledger'] },
+    tax: { id:'tax', name:'Tax & Compliance Agent', tagline:'Cross-border VAT · Nexus · Journal posting', bc:'POST /journals',
+      kpis:[['VAT Entries','5'],['Jurisdictions','5'],['Certificates Valid','12'],['Filings Verified','3']],
+      tool:{ title:'VAT / Nexus Cross-Check & Journal Post', selectLabel:'Select a jurisdiction / entry', options:['VAT-3391 · Germany reverse-charge','VAT-3393 · France standard','VAT-3395 · Netherlands reverse-charge'] },
+      log:['Posted VAT journal VAT-3391 and updated VAT entries','Validated exemption certificates (12 valid)','Verified 3 filings ahead of Sep-30'] },
+    controls: { id:'controls', name:'Controls & Access Agent', tagline:'Segregation of duties · Access anomalies · Approvals', bc:'GET /permissionSets',
+      kpis:[['SoD Conflicts','0'],['Access Reviews','36'],['Anomalies','0'],['Coverage','100%']],
+      tool:{ title:'Access Review', selectLabel:'Select a review scope', options:['Finance role set','AP clerks','Journal posters'] },
+      log:['Ran SoD scan across finance roles — 0 conflicts','Reviewed 36 access grants','No anomalies found'] },
+    ap: { id:'ap', name:'AP Exception Processing Agent', tagline:'3-way match · OCR anomalies · Approval routing', bc:'GET /purchaseInvoices',
+      kpis:[['Open Exceptions','4'],['On Hold','4'],['Auto-cleared','243'],['Auto-recovery Rate','94%']],
+      tool:{ title:'3-Way Match Exception Resolver', selectLabel:'Select an invoice on hold', options:['INV-77120 · Price variance','INV-77140 · Missing GRN','INV-77155 · Quantity mismatch'] },
+      log:['Ran a 3-way match on INV-77120 — Net-45 terms','Placed INV-77140 on hold — missing goods receipt','Escalated INV-77155 quantity mismatch'] },
+    vendor: { id:'vendor', name:'Vendor Query Assistant', tagline:'Self-service · Payment status · W-9 validation', bc:'GET /vendorPayments',
+      kpis:[['Queries (30d)','63'],['Auto-Resolved','58'],['Avg. Response','1.2s'],['Escalations','5']],
+      tool:{ title:'Vendor Query Simulator', selectLabel:'Select a vendor query', options:['When will Spark Foundry be paid?','Is Meridian W-9 on file?','Payment status for Publicis'] },
+      log:['Answered 63 vendor queries this month','Validated W-9 for 41 vendors','Escalated 5 queries to AP team'] }
+  },
+  agentOrder: ['royalty','collections','billing','tax','controls','ap','vendor']
+};
+
+/* ═════════ Shared components ═════════ */
+function kpiCard(label, value, sub) {
+  return el('div', { class:'au-kpi' },
+    el('div', { class:'au-kpi-label' }, label),
+    el('div', { class:'au-kpi-value' }, value),
+    sub ? el('div', { class:'au-kpi-sub' }, sub) : null);
+}
+
+function dataTable(columns, rows, opts) {
+  opts = opts || {};
+  const table = el('table', { class:'au-table' });
+  const thead = el('tr');
+  columns.forEach(c => thead.appendChild(el('th', null, c.label)));
+  table.appendChild(el('thead', null, thead));
+  const tbody = el('tbody');
+  if (!rows.length) {
+    const tr = el('tr', { class:'au-empty' });
+    tr.appendChild(el('td', { colspan: columns.length }, opts.emptyText || 'No records.'));
+    tbody.appendChild(tr);
+  } else {
+    rows.forEach(r => {
+      const tr = el('tr');
+      columns.forEach(c => {
+        const v = r[c.key];
+        const td = el('td', c.status ? { class:'au-status ' + statusClass(v) } : null, String(v == null ? '' : v));
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+  table.appendChild(tbody);
+  return table;
+}
+function statusClass(v) {
+  const s = String(v).toLowerCase();
+  if (/paid|matched|posted|verified|active/.test(s)) return 'ok';
+  if (/hold|pending|open|disputed/.test(s)) return 'warn';
+  if (/overdue|escalated|rejected/.test(s)) return 'bad';
+  return '';
+}
+
+function donut(segments) {
+  // segments: [{label,value,color}]
+  const total = segments.reduce((a, s) => a + s.value, 0) || 1;
+  const R = 52, C = 2 * Math.PI * R;
+  let offset = 0;
+  const svg = el('div', { class:'au-chart' });
+  let circles = '';
+  segments.forEach(s => {
+    const len = (s.value / total) * C;
+    circles += `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${s.color}" stroke-width="18" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-offset}" transform="rotate(-90 70 70)"></circle>`;
+    offset += len;
+  });
+  const legend = segments.map(s => `<span class="au-leg"><i style="background:${s.color}"></i>${s.label}</span>`).join('');
+  svg.innerHTML = `<svg viewBox="0 0 140 140" width="140" height="140">${circles}</svg><div class="au-legend">${legend}</div>`;
+  return svg;
+}
+
+function lineChart(seriesA, seriesB, labels) {
+  const W = 480, H = 160, pad = 24;
+  const all = seriesA.concat(seriesB);
+  const max = Math.max.apply(null, all) || 1;
+  const x = i => pad + (i * (W - 2 * pad)) / (labels.length - 1);
+  const y = v => H - pad - (v / max) * (H - 2 * pad);
+  const path = s => s.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  const wrap = el('div', { class:'au-chart' });
+  wrap.innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">` +
+    `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="var(--au-grid)"/>` +
+    `<path d="${path(seriesA)}" fill="none" stroke="#0f6cbd" stroke-width="2"/>` +
+    `<path d="${path(seriesB)}" fill="none" stroke="#8a8886" stroke-width="2" stroke-dasharray="4 3"/>` +
+    `</svg>` +
+    `<div class="au-legend"><span class="au-leg"><i style="background:#0f6cbd"></i>Agent actions</span><span class="au-leg"><i style="background:#8a8886"></i>Manual actions</span></div>`;
+  return wrap;
+}
+
+function panel(title, bodyNode, actions) {
+  const head = el('div', { class:'au-panel-head' }, el('h3', null, title));
+  if (actions) actions.forEach(a => head.appendChild(el('button', { class:'au-btn', onclick:a.fn }, a.label)));
+  return el('div', { class:'au-panel' }, head, el('div', { class:'au-panel-body' }, bodyNode));
+}
+
+/* ═════════ Theme toggle & BC connection ═════════ */
+function setTheme(mode) {
+  document.documentElement.dataset.theme = mode;
+  try { localStorage.setItem('aurelius-theme', mode); } catch (e) {}
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = mode === 'dark' ? '☀' : '☾';
+}
+function initTheme() {
+  let mode = 'light';
+  try { mode = localStorage.getItem('aurelius-theme') || 'light'; } catch (e) {}
+  setTheme(mode);
+}
+function toggleTheme() {
+  setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+}
+function setBcStatus(state) {
+  const ind = document.getElementById('bcIndicator');
+  if (!ind) return;
+  const map = { live:['bc-live','Live from Business Central'], synced:['bc-live','Synced from Business Central'], authenticating:['bc-auth','Authenticating to Business Central'] };
+  const [cls, label] = map[state] || map.live;
+  ind.className = 'bc-indicator ' + cls;
+  ind.querySelector('.bc-label').textContent = label;
+}
+function bcSyncNow() {
+  setBcStatus('authenticating');
+  setTimeout(() => { setBcStatus('synced'); toast('Synced from Business Central'); }, 800);
+}
+
+/* ═════════ Router ═════════ */
+const VIEW_RENDERERS = {};
+const ROUTES = { '#/dashboard':'view-dashboard', '#/orchestrator':'view-orchestrator', '#/erp':'view-erp', '#/audit':'view-audit' };
+function parseHash(h) {
+  h = h || location.hash || '#/dashboard';
+  const m = h.match(/^#\/agent\/([\w-]+)$/);
+  if (m && DATA.agents[m[1]]) return { view:'view-agent', name:'agent', param:m[1], route:h };
+  const view = ROUTES[h];
+  if (view) return { view, name:h.replace('#/',''), param:null, route:h };
+  return { view:'view-dashboard', name:'dashboard', param:null, route:'#/dashboard' };
+}
+function navigate(h) { if (location.hash !== h) location.hash = h; else renderRoute(); }
+function renderRoute() {
+  const r = parseHash(location.hash);
+  document.querySelectorAll('.view').forEach(v => { v.hidden = (v.id !== r.view); });
+  document.querySelectorAll('[data-route]').forEach(elm =>
+    elm.classList.toggle('is-active', elm.getAttribute('data-route') === r.route));
+  const fn = r.param ? VIEW_RENDERERS.agent : VIEW_RENDERERS[r.name];
+  if (fn) fn(r.param);
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', renderRoute);
+window.addEventListener('DOMContentLoaded', function () { initTheme(); renderRoute(); });
+
+/* ═════════ Dashboard renderer (Task 4) ═════════ */
+function renderDashboard() {
+  let host = document.getElementById('au-dash-extra');
+  if (!host) {
+    host = el('div', { id:'au-dash-extra' });
+    const main = document.querySelector('#view-dashboard .main');
+    main.insertBefore(host, main.firstChild);
+  }
+  host.innerHTML = '';
+  const k = DATA.kpis;
+  const kpiRow = el('div', { class:'au-kpi-row' },
+    kpiCard('Transactions Orchestrated', k.txnOrchestrated, 'today'),
+    kpiCard('Value Under Automation', k.valueUnderAutomation, 'since yesterday'),
+    kpiCard('Straight-Through Rate', k.straightThrough, 'auto-resolved'),
+    kpiCard('Avg. Routing Confidence', k.avgConfidence, 'orchestrator'));
+  const charts = el('div', { class:'au-chart-row' },
+    panel('Orchestration Throughput', lineChart([4,6,9,7,11,14,12], [9,8,7,6,5,4,3], ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])),
+    panel('Agent Load Split', donut([
+      { label:'AP', value:34, color:'#0f6cbd' },
+      { label:'Collections', value:22, color:'#2899f5' },
+      { label:'Billing', value:18, color:'#13a10e' },
+      { label:'Tax', value:15, color:'#ca5010' },
+      { label:'Vendor', value:11, color:'#8764b8' }
+    ])));
+  host.appendChild(el('div', { class:'au-section-title' }, 'Orchestration Overview'));
+  host.appendChild(kpiRow);
+  host.appendChild(charts);
+}
+VIEW_RENDERERS.dashboard = renderDashboard;
+
+/* ═════════ Agent workspace renderer (Task 5) ═════════ */
+function appendAgentLog(agentId, entry) {
+  const a = DATA.agents[agentId];
+  if (a) a.log.unshift(entry);
+}
+function runAgentTool(agentId, inputValue) {
+  const a = DATA.agents[agentId];
+  const results = {
+    ap:        { summary:`3-way match run on ${inputValue}. PO, receipt & invoice compared — variance within tolerance after review.`, bcAction:'GET /purchaseInvoices · match cleared', related:['INV-77120','INV-77140'] },
+    collections:{ summary:`Ledger aging retrieved for ${inputValue}. Dunning L2 drafted and promise-to-pay logged.`, bcAction:'GET /customerLedgerEntries · Dunning L2', related:['V-1042','V-1093'] },
+    billing:   { summary:`Volume rebate recomputed for ${inputValue}. $84,500 credit note drafted.`, bcAction:'POST /salesCreditMemos · draft credit memo', related:['SI-90233'] },
+    tax:       { summary:`VAT / nexus cross-check on ${inputValue}. Reverse-charge validated; journal ready to post.`, bcAction:'POST /journals · VAT journal posted', related:['SI-90233'] },
+    controls:  { summary:`Access review on ${inputValue}. No segregation-of-duties conflicts detected.`, bcAction:'GET /permissionSets · reviewed', related:[] },
+    vendor:    { summary:`Query resolved: ${inputValue}. Payment scheduled; W-9 on file and valid.`, bcAction:'GET /vendorPayments · payment ETA', related:['V-1071'] },
+    royalty:   { summary:`Statement reconciled: ${inputValue}. One discrepancy vs contract v2.1 flagged.`, bcAction:'GET /royaltyStatements · reconciled', related:[] }
+  };
+  return results[agentId] || { summary:`Ran ${a ? a.tool.title : 'tool'} on ${inputValue}.`, bcAction:a ? a.bc : '', related:[] };
+}
+function renderAgentWorkspace(agentId) {
+  const a = DATA.agents[agentId];
+  const root = document.getElementById('root-agent');
+  root.innerHTML = '';
+  if (!a) { navigate('#/dashboard'); return; }
+  root.appendChild(el('div', { class:'au-ws-head' },
+    el('button', { class:'au-btn ghost', id:'workspace-back-button', onclick:() => navigate('#/dashboard') }, '‹ Back'),
+    el('div', null, el('h2', null, a.name), el('div', { class:'au-ws-tag' }, a.tagline)),
+    el('div', { class:'au-ws-bc' }, a.bc)));
+  const kpiRow = el('div', { class:'au-kpi-row' });
+  a.kpis.forEach(([label, val]) => kpiRow.appendChild(kpiCard(label, val)));
+  root.appendChild(kpiRow);
+
+  // Tool
+  const select = el('select', { class:'au-select', id:'tool-select' });
+  a.tool.options.forEach(o => select.appendChild(el('option', null, o)));
+  const resultPanel = el('div', { class:'au-tool-result', id:'tool-result' }, el('div', { class:'au-muted' }, 'Run the tool to see a result.'));
+  const relatedPanel = el('div', { class:'au-related', id:'tool-related' });
+  const runBtn = el('button', { class:'au-btn primary', id:'tool-run-button', onclick:() => {
+    const val = select.value;
+    const res = runAgentTool(agentId, val);
+    resultPanel.innerHTML = '';
+    resultPanel.appendChild(el('div', { class:'au-result-summary' }, res.summary));
+    resultPanel.appendChild(el('div', { class:'au-result-bc' }, 'BC action: ' + res.bcAction));
+    relatedPanel.innerHTML = '<div class="au-related-title">Related BC Invoices</div>';
+    if (res.related.length) res.related.forEach(id => relatedPanel.appendChild(el('span', { class:'au-chip' }, id)));
+    else relatedPanel.appendChild(el('span', { class:'au-muted' }, 'None'));
+    appendAgentLog(agentId, res.summary);
+    renderLog();
+    toast(a.name + ' — tool run complete');
+  } }, 'Run');
+  const toolBody = el('div', null,
+    el('label', { class:'au-label' }, a.tool.selectLabel),
+    el('div', { class:'au-tool-row' }, select, runBtn),
+    resultPanel, relatedPanel);
+  root.appendChild(panel(a.tool.title, toolBody));
+
+  // Activity log
+  const logBody = el('div', { id:'au-agent-log' });
+  function renderLog() {
+    logBody.innerHTML = '';
+    a.log.forEach(entry => logBody.appendChild(el('div', { class:'au-log-item' }, entry)));
+  }
+  renderLog();
+  root.appendChild(panel('Activity Log', logBody));
+}
+VIEW_RENDERERS.agent = renderAgentWorkspace;
+
+/* ═════════ Master Orchestrator (Task 6) ═════════ */
+const PROMPT_MAP = [
+  { re:/3-way match|INV-77120/i, agentId:'ap',         classification:'AP Exception',     confidence:0.97, bcAction:'GET /purchaseInvoices · match cleared' },
+  { re:/rebate|Publicis/i,       agentId:'billing',    classification:'Billing & Rebate', confidence:0.95, bcAction:'POST /salesCreditMemos · draft credit memo' },
+  { re:/VAT|reverse-charge|SI-90233/i, agentId:'tax',  classification:'Tax & Compliance', confidence:0.96, bcAction:'POST /journals · VAT journal posted' },
+  { re:/overdue|Meridian/i,      agentId:'collections',classification:'Collections',      confidence:0.93, bcAction:'GET /customerLedgerEntries · Dunning L2' },
+  { re:/paid|Spark Foundry/i,    agentId:'vendor',     classification:'Vendor Query',     confidence:0.90, bcAction:'GET /vendorPayments · payment ETA' }
+];
+function classifyPrompt(t) {
+  const hit = PROMPT_MAP.find(p => p.re.test(t)) ||
+    { agentId:'ap', classification:'General', confidence:0.72, bcAction:'GET /purchaseInvoices' };
+  return Object.assign({}, hit, { result:`Routed to ${DATA.agents[hit.agentId].name}. ${hit.bcAction}.` });
+}
+const ORCH_PROMPTS = [
+  'Resolve the 3-way match exception on INV-77120',
+  'Recompute the Q2 volume rebate for Publicis',
+  'Post the German reverse-charge VAT on SI-90233',
+  'Why is Meridian Broadcasting overdue?',
+  'When will Spark Foundry be paid?'
+];
+const PIPELINE_STAGES = ['Intent Parsing','Scoring against agent registry','Routed Agent','Running domain workflow','BC API Call','Persisting result to ledger'];
+function renderOrchestrator() {
+  const root = document.getElementById('root-orchestrator');
+  root.innerHTML = '';
+  root.appendChild(el('div', { class:'au-section-title' }, 'Master Orchestrator'));
+  root.appendChild(el('div', { class:'au-muted', style:'margin-bottom:12px' }, 'Aurelius-Router v2.4 · classifies a request, routes it to the right agent, runs a Business Central workflow, and writes an audit record.'));
+
+  const input = el('input', { class:'au-input', id:'orchestrator-chat-input', type:'text', placeholder:'Ask the orchestrator…' });
+  const send = el('button', { class:'au-btn primary', id:'orchestrator-send-button', onclick:() => runOrchestrator(input.value.trim() || input.placeholder) }, 'Send');
+  root.appendChild(el('div', { class:'au-tool-row' }, input, send));
+
+  const chips = el('div', { class:'au-chips' });
+  ORCH_PROMPTS.forEach(p => chips.appendChild(el('button', { class:'au-chip clickable', onclick:() => { input.value = p; runOrchestrator(p); } }, p)));
+  root.appendChild(chips);
+
+  const pipe = el('div', { class:'au-pipeline', id:'orchestrator-pipeline' });
+  PIPELINE_STAGES.forEach(s => pipe.appendChild(el('div', { class:'au-stage' }, s)));
+  root.appendChild(panel('Routing Pipeline', pipe));
+
+  root.appendChild(panel('Result', el('div', { class:'au-tool-result', id:'orchestrator-result' }, el('div', { class:'au-muted' }, 'Send a request to see routing and result.'))));
+}
+function runOrchestrator(text) {
+  const hit = classifyPrompt(text);
+  const stages = document.querySelectorAll('#orchestrator-pipeline .au-stage');
+  stages.forEach(s => s.classList.remove('active','done'));
+  let i = 0;
+  const tick = () => {
+    if (i > 0) stages[i - 1] && stages[i - 1].classList.add('done');
+    if (i < stages.length) {
+      stages[i].classList.add('active');
+      if (i === 2) stages[i].setAttribute('data-conf', 'conf ' + hit.confidence);
+      i++;
+      setTimeout(tick, 380);
+    } else {
+      finishOrchestrator(text, hit);
+    }
+  };
+  tick();
+}
+function finishOrchestrator(text, hit) {
+  const out = document.getElementById('orchestrator-result');
+  out.innerHTML = '';
+  out.appendChild(el('div', { class:'au-result-meta' },
+    el('span', { class:'au-badge' }, 'Classification: ' + hit.classification),
+    el('span', { class:'au-badge', id:'routing-confidence-badge' }, 'Confidence: ' + hit.confidence),
+    el('span', { class:'au-badge', id:'routing-target-agent' }, 'Agent: ' + DATA.agents[hit.agentId].name)));
+  out.appendChild(el('div', { class:'au-result-summary' }, hit.result));
+  out.appendChild(el('div', { class:'au-result-bc' }, 'BC action: ' + hit.bcAction));
+  appendAgentLog(hit.agentId, 'Orchestrator: ' + text);
+  appendAuditRow({
+    id:'AUD-' + (8842 + (DATA.audit.length - 6)),
+    action:text, classification:hit.classification, agent:DATA.agents[hit.agentId].name,
+    confidence:String(hit.confidence), override:'No', bc:hit.bcAction, approver:'Orchestrator',
+    ts:new Date().toISOString().slice(0, 16).replace('T', ' ')
+  });
+  toast('Orchestrated → ' + hit.classification);
+}
+VIEW_RENDERERS.orchestrator = renderOrchestrator;
+
+/* ═════════ Business Central Explorer (Task 7) ═════════ */
+const ERP_TABS = {
+  ledger:  { label:'Vendor Ledger', cols:[{key:'id',label:'Entry'},{key:'customer',label:'Customer'},{key:'amount',label:'Amount'},{key:'balance',label:'Balance'},{key:'due',label:'Due'},{key:'terms',label:'Terms'},{key:'status',label:'Status',status:true}], rows:() => DATA.ledger },
+  invoices:{ label:'Sales Invoices', cols:[{key:'id',label:'Invoice'},{key:'vendor',label:'Party'},{key:'amount',label:'Amount'},{key:'terms',label:'Terms'},{key:'exception',label:'Exception'},{key:'status',label:'Status',status:true}], rows:() => DATA.invoices },
+  vat:     { label:'VAT Entries', cols:[{key:'id',label:'VAT Entry'},{key:'jurisdiction',label:'Jurisdiction'},{key:'type',label:'Type'},{key:'rate',label:'Rate'},{key:'base',label:'Base'},{key:'status',label:'Status',status:true}], rows:() => DATA.vatEntries },
+  hold:    { label:'AP Hold Queue', cols:[{key:'id',label:'Invoice'},{key:'vendor',label:'Vendor'},{key:'exception',label:'Exception'},{key:'variance',label:'Variance'},{key:'age',label:'Age'},{key:'action',label:'Suggested Action'}], rows:() => DATA.holdQueue }
+};
+let erpTab = 'ledger';
+function renderErpTab(tabKey, filterText) {
+  const t = ERP_TABS[tabKey];
+  let rows = t.rows();
+  if (filterText) {
+    const f = filterText.toLowerCase();
+    rows = rows.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(f)));
+  }
+  const host = document.getElementById('erp-table-host');
+  host.innerHTML = '';
+  host.appendChild(dataTable(t.cols, rows, { emptyText:'No records match the filter.' }));
+}
+function renderErp() {
+  const root = document.getElementById('root-erp');
+  root.innerHTML = '';
+  root.appendChild(el('div', { class:'au-section-title' }, 'Business Central Explorer'));
+  const protos = el('div', { class:'au-protos' });
+  ['OData v4 API','REST Automation API','SOAP (Legacy Pages)','Webhooks / Bus. Events'].forEach(p => protos.appendChild(el('span', { class:'au-chip' }, p)));
+  root.appendChild(protos);
+
+  const tabs = el('div', { class:'au-tabs' });
+  Object.keys(ERP_TABS).forEach(key => {
+    tabs.appendChild(el('button', { class:'au-tab' + (key === erpTab ? ' active' : ''), onclick:() => { erpTab = key; renderErp(); } }, ERP_TABS[key].label));
+  });
+  const filter = el('input', { class:'au-input', id:'erp-filter-input', type:'text', placeholder:'Filter records…', oninput:(e) => renderErpTab(erpTab, e.target.value) });
+  const syncBtn = el('button', { class:'au-btn', id:'erp-sync-button', onclick:bcSyncNow }, 'Sync');
+  const exportBtn = el('button', { class:'au-btn', id:'erp-export-button', onclick:() => toast('CSV extract will be emailed') }, 'Export');
+  root.appendChild(el('div', { class:'au-erp-toolbar' }, tabs, el('div', { class:'au-erp-actions' }, filter, syncBtn, exportBtn)));
+  root.appendChild(el('div', { id:'erp-table-host' }));
+  renderErpTab(erpTab, '');
+}
+VIEW_RENDERERS.erp = renderErp;
+
+/* ═════════ Audit & Compliance Log (Task 8) ═════════ */
+const AUDIT_COLS = [
+  { key:'id', label:'Record' }, { key:'action', label:'Action Taken' }, { key:'classification', label:'Classification' },
+  { key:'agent', label:'Routed Agent' }, { key:'confidence', label:'Confidence' }, { key:'override', label:'Human Override' },
+  { key:'bc', label:'BC Action' }, { key:'approver', label:'Approved-by' }, { key:'ts', label:'Timestamp' }
+];
+function appendAuditRow(row) {
+  DATA.audit.unshift(row);
+  if (!document.getElementById('view-audit').hidden) renderAudit(document.getElementById('audit-search-input') ? document.getElementById('audit-search-input').value : '');
+}
+function renderAudit(searchText) {
+  const root = document.getElementById('root-audit');
+  const existingVal = searchText != null ? searchText : (document.getElementById('audit-search-input') ? document.getElementById('audit-search-input').value : '');
+  root.innerHTML = '';
+  root.appendChild(el('div', { class:'au-section-title' }, 'Audit & Compliance Log'));
+  root.appendChild(el('div', { class:'au-muted', style:'margin-bottom:10px' }, 'Immutable · WORM ledger — every orchestrated action is recorded.'));
+  const search = el('input', { class:'au-input', id:'audit-search-input', type:'text', placeholder:'Search audit records…', value:existingVal, oninput:(e) => renderAuditTable(e.target.value) });
+  root.appendChild(el('div', { class:'au-erp-actions' }, search));
+  root.appendChild(el('div', { id:'audit-table-host' }));
+  renderAuditTable(existingVal);
+}
+function renderAuditTable(filterText) {
+  let rows = DATA.audit;
+  if (filterText) {
+    const f = filterText.toLowerCase();
+    rows = rows.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(f)));
+  }
+  const host = document.getElementById('audit-table-host');
+  host.innerHTML = '';
+  host.appendChild(dataTable(AUDIT_COLS, rows, { emptyText:'No audit records match the search.' }));
+}
+VIEW_RENDERERS.audit = renderAudit;
+
 </script>
 </body>
 </html>
