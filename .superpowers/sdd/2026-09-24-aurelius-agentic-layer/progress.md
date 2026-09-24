@@ -13,3 +13,9 @@ Task 7: complete (BC Explorer tabs/filter/empty-state; smoke pass)
 Task 8: complete (Audit Log search/empty-state/live append; smoke pass)
 tests: node smoke.js (jsdom) -> 30/30 pass; node --check combined -> OK
 Task 9: complete (commit 65a9512; config JSON+YAML valid, local serve HTTP 200)
+Final review: subagent (opus), verdict APPROVE — all 5 focus areas handled, SWA/workflow sound, no Critical/Important.
+Final: re-graded 2 minors to Important (degrade signature Orchestrator→Audit demo).
+Final: fixed empty-Send junk audit row — smoke 'empty Send appends no audit row' RED→GREEN, suite 35/35.
+Final: fixed General/AP classification mismatch → route to Vendor Query Assistant 'General Inquiry' — smoke 4 checks RED→GREEN, suite 35/35.
+Final: minor (deferred): lineChart/donut/au-stage.done colors hard-coded (within legacy-dark ruling tolerance).
+Final: minor (deferred): staticwebapp 404 responseOverride also rewrites excluded asset 404s to app HTML (harmless for static demo).
