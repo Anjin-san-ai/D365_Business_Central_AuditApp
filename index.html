@@ -18,6 +18,9 @@
   }
   a { color: inherit; text-decoration: none; }
 
+  .view[hidden] { display: none; }
+  .view-root { display: block; }
+
   /* ═══════════════════════════════════════════════
      TOP HEADER BAR (D365 black bar)
   ═══════════════════════════════════════════════ */
@@ -1234,6 +1237,8 @@
   <a class="quick-link" href="#" onclick="setQuick(this,event)">Agent Config</a>
 </div>
 
+<!-- ═══════════ VIEWS ═══════════ -->
+<section class="view" id="view-dashboard">
 <!-- ═══════════ MAIN CONTENT ═══════════ -->
 <div class="main">
 
@@ -1624,6 +1629,12 @@
   </div><!-- /biz-row -->
 
 </div><!-- /main -->
+</section><!-- /view-dashboard -->
+
+<section class="view" id="view-orchestrator" hidden><div class="main"><div class="view-root" id="root-orchestrator"></div></div></section>
+<section class="view" id="view-erp" hidden><div class="main"><div class="view-root" id="root-erp"></div></div></section>
+<section class="view" id="view-audit" hidden><div class="main"><div class="view-root" id="root-audit"></div></div></section>
+<section class="view" id="view-agent" hidden><div class="main"><div class="view-root" id="root-agent"></div></div></section>
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="page-footer">
