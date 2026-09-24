@@ -373,3 +373,91 @@ Everything is inline HTML/CSS/JS in the single file — no build step.
 ────────────────────────────────────────────────────────────────────────────────
   REACH Finance AI Platform · Built by Cognizant with Claude AI · 2026
 ────────────────────────────────────────────────────────────────────────────────
+
+
+════════════════════════════════════════════════════════════════════════════════
+  4. AURELIUS AGENTIC LAYER — NEW MULTI-PAGE VIEWS (2026 update)
+════════════════════════════════════════════════════════════════════════════════
+
+The demo file is now index.html (renamed from reach-d365-agents.html) and is a
+multi-view app. The top black bar, company/nav bar, and quick-links are unchanged
+in look, but the NAV TABS and QUICK-LINKS now NAVIGATE (hash routes) instead of
+only firing toasts. D365 Business Central look-and-feel is unchanged.
+
+ROUTES (also reachable by editing the URL hash):
+    #/dashboard        Executive Dashboard (default)
+    #/orchestrator     Master Orchestrator
+    #/erp              Business Central Explorer
+    #/audit            Audit & Compliance Log
+    #/agent/<id>       Agent workspace, id ∈ royalty, collections, billing, tax,
+                       controls, ap, vendor
+
+────────────────────────────────────────
+  NAV TABS (top nav bar) — all CLICKABLE, all navigate
+────────────────────────────────────────
+    Dashboard · Orchestrator · Royalties · Collections · Billing & Rebate ·
+    Tax & Compliance · Controls · BC Explorer · Audit Log
+    (☰ hamburger still toasts.)
+
+────────────────────────────────────────
+  QUICK-LINKS BAR — navigate
+────────────────────────────────────────
+    All Agents → Dashboard · Orchestrator · BC Explorer · Audit Trail → Audit Log ·
+    Alerts (toast) · Agent Config → Orchestrator
+
+────────────────────────────────────────
+  NEW TOP-BAR CONTROLS (right side)
+────────────────────────────────────────
+  CLICKABLE:
+    • BC connection pill ("Live from Business Central") → click = Sync Now
+      (shows "Authenticating…" then "Synced" + toast)
+    • Theme toggle (☾ / ☀) → flips dark / light, remembered across reloads
+
+────────────────────────────────────────
+  DASHBOARD (#/dashboard)
+────────────────────────────────────────
+  New "Orchestration Overview": 4 KPI cards (Transactions Orchestrated, Value Under
+  Automation, Straight-Through Rate, Avg. Routing Confidence), an Orchestration
+  Throughput line chart, and an Agent Load Split donut. All original dashboard
+  content (hero, KPIs, agent tiles, drawers, E2E cards, charts) is retained.
+
+────────────────────────────────────────
+  MASTER ORCHESTRATOR (#/orchestrator)  ★ centerpiece
+────────────────────────────────────────
+  CLICKABLE:
+    • Chat input + Send → routes the request
+    • 5 example-prompt chips → auto-run a scripted request
+  Each run animates the routing pipeline (Intent Parsing → Scoring → Routed Agent →
+  Workflow → BC API Call → Persist), shows Classification / Confidence / Routed Agent
+  + the BC action, and APPENDS a row to the Audit Log.
+
+────────────────────────────────────────
+  AGENT WORKSPACES (#/agent/<id>)
+────────────────────────────────────────
+  Each has a KPI strip, an interactive TOOL (pick an option → Run → result panel +
+  Related BC Invoices), and an activity log. Running the tool adds a log entry.
+  ‹ Back returns to the dashboard.
+
+────────────────────────────────────────
+  BUSINESS CENTRAL EXPLORER (#/erp)
+────────────────────────────────────────
+  CLICKABLE:
+    • Tabs: Vendor Ledger · Sales Invoices · VAT Entries · AP Hold Queue
+    • Filter box (live client-side filter; no matches → empty-state row)
+    • Sync (pulses BC indicator) · Export (toast "CSV extract will be emailed")
+  Protocol chips (OData v4 / REST / SOAP / Webhooks) are display-only.
+
+────────────────────────────────────────
+  AUDIT & COMPLIANCE LOG (#/audit)
+────────────────────────────────────────
+  Immutable/WORM ledger table (Record, Action, Classification, Routed Agent,
+  Confidence, Human Override, BC Action, Approved-by, Timestamp). Search box filters
+  live. Orchestrator runs append new rows here in-session.
+
+────────────────────────────────────────
+  ROSTER NOTE
+────────────────────────────────────────
+  This app is an ADDITIVE SUPERSET of the reference "Aurelius" site: it keeps the
+  mockup's Royalty & Creator and Controls & Access agents AND adds Aurelius's Master
+  Orchestrator, AP Exception, and Vendor Query. Aurelius itself does not have the
+  Royalty/Controls agents; that difference is intentional.
