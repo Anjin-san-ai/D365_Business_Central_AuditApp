@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REACH · Dynamics 365 Business Central — Agentic Finance</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #faf9f8;
+    color: #201f1e;
+    font-size: 13px;
+    min-width: 1200px;
+    overflow-x: auto;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ═══════════════════════════════════════════════
+     TOP HEADER BAR (D365 black bar)
+  ═══════════════════════════════════════════════ */
+  .top-bar {
+    background: #000;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 12px;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    color: #fff;
+  }
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  .reach-logo {
+    height: 26px;
+    width: auto;
+    display: block;
+  }
+  .top-bar-divider {
+    width: 1px;
+    height: 22px;
+    background: rgba(255,255,255,0.22);
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+  .app-launcher {
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: #fff;
+    position: relative;
+  }
+  .app-launcher:hover { background: rgba(255,255,255,0.1); }
+  .app-launcher-grid {
+    display: grid;
+    grid-template-columns: repeat(3,4px);
+    grid-template-rows: repeat(3,4px);
+    gap: 2px;
+  }
+  .app-launcher-grid span {
+    width: 4px; height: 4px;
+    background: #fff;
+    border-radius: 1px;
+  }
+  .d365-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.94);
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+  .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .top-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.85);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .top-icon:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .top-icon.active { background: rgba(255,255,255,0.14); color: #fff; }
+  .top-icon .badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d13438;
+    border: 1.5px solid #000;
+  }
+  .top-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0078d4 0%, #40e0d0 100%);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 6px 0 4px;
+    border: 2px solid transparent;
+  }
+  .top-avatar:hover { border-color: rgba(255,255,255,0.5); }
+  .cognizant-divider {
+    width: 1px;
+    height: 22px;
+    background: rgba(255,255,255,0.22);
+    margin: 0 10px;
+  }
+  .cognizant-logo {
+    height: 28px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+  }
+
+  /* Dropdown Panels (top bar buttons) */
+  .dropdown {
+    position: fixed;
+    top: 52px;
+    right: 8px;
+    width: 340px;
+    max-height: 500px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #edebe9;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+    border-radius: 4px;
+    z-index: 600;
+    display: none;
+    animation: fadeInDown 0.18s ease;
+    color: #201f1e;
+  }
+  .dropdown.open { display: block; }
+  .dropdown-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #edebe9;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dropdown-close { cursor: pointer; color: #605e5c; font-size: 15px; }
+  .dropdown-close:hover { color: #201f1e; }
+  .dropdown-body { padding: 8px 0; }
+  .dropdown-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    align-items: flex-start;
+    font-size: 13px;
+  }
+  .dropdown-item:hover { background: #f3f2f1; }
+  .dropdown-item .item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #deecf9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .item-body { flex: 1; }
+  .item-title { font-weight: 600; margin-bottom: 2px; font-size: 13px; }
+  .item-desc { font-size: 12px; color: #605e5c; line-height: 1.4; }
+  .item-time { font-size: 11px; color: #a19f9d; margin-top: 2px; }
+
+  /* App launcher grid dropdown */
+  .app-grid-panel {
+    position: fixed;
+    top: 52px;
+    left: 8px;
+    width: 300px;
+    background: #fff;
+    border: 1px solid #edebe9;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+    padding: 12px;
+    border-radius: 4px;
+    z-index: 600;
+    display: none;
+    animation: fadeInDown 0.18s ease;
+  }
+  .app-grid-panel.open { display: block; }
+  .app-grid-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #201f1e; }
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .app-grid-item {
+    padding: 12px 6px;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11.5px;
+    color: #201f1e;
+    transition: background 0.15s;
+  }
+  .app-grid-item:hover { background: #f3f2f1; }
+  .app-grid-item .app-emoji { font-size: 22px; display: block; margin-bottom: 4px; }
+
+  /* Search bar dropdown */
+  .search-panel {
+    position: fixed;
+    top: 52px;
+    right: 8px;
+    width: 420px;
+    background: #fff;
+    border: 1px solid #edebe9;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+    border-radius: 4px;
+    z-index: 600;
+    display: none;
+    padding: 12px;
+    animation: fadeInDown 0.18s ease;
+  }
+  .search-panel.open { display: block; }
+  .search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #8a8886;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+  }
+  .search-input:focus { border-color: #0078d4; }
+  .search-hint {
+    font-size: 12px;
+    color: #605e5c;
+    margin-top: 8px;
+    padding: 6px 4px;
+  }
+  .search-suggest {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #edebe9;
+  }
+  .search-suggest-title { font-size: 11px; color: #605e5c; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .search-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #f3f2f1;
+    border-radius: 12px;
+    font-size: 12px;
+    margin: 2px 4px 2px 0;
+    cursor: pointer;
+  }
+  .search-chip:hover { background: #e1dfdd; }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #201f1e;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.24);
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .check {
+    color: #92d050;
+    font-size: 15px;
+  }
+
+  /* Overlay backdrop for dropdowns */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 450;
+    display: none;
+  }
+  .backdrop.open { display: block; }
+
+  /* ═══════════════════════════════════════════════
+     NAV / COMPANY BAR
+  ═══════════════════════════════════════════════ */
+  .nav-bar {
+    background: #fff;
+    border-bottom: 1px solid #edebe9;
+    padding: 0 24px;
+  }
+  .company-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 6px;
+  }
+  .company-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #201f1e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+  }
+  .company-name .caret {
+    font-size: 10px;
+    color: #605e5c;
+  }
+  .company-menu {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 260px;
+    background: #fff;
+    border: 1px solid #edebe9;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+    border-radius: 4px;
+    z-index: 400;
+    display: none;
+    animation: fadeInDown 0.15s;
+    font-weight: 400;
+  }
+  .company-menu.open { display: block; }
+  .company-menu-title { padding: 10px 14px; font-size: 11px; color: #605e5c; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #edebe9; }
+  .company-menu-item {
+    padding: 10px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .company-menu-item:hover { background: #f3f2f1; }
+  .company-menu-item.active { background: #f0faf9; color: #005a4e; font-weight: 600; }
+  .company-menu-item .tick { color: #008272; }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    align-items: flex-end;
+    padding: 4px 0 0;
+    flex: 1;
+  }
+  .nav-tab {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: #605e5c;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-tab:hover { color: #0078d4; }
+  .nav-tab.active {
+    color: #0078d4;
+    border-bottom: 2px solid #0078d4;
+    font-weight: 600;
+  }
+  .nav-tab .caret { font-size: 9px; color: #605e5c; }
+  .nav-tab.active .caret { color: #0078d4; }
+  .nav-tab-sep {
+    width: 1px;
+    height: 16px;
+    background: #edebe9;
+    align-self: center;
+    margin: 0 6px;
+  }
+  .nav-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .nav-bar-icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: #605e5c;
+    font-size: 14px;
+    padding-bottom: 4px;
+  }
+  .nav-bar-icons span {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .nav-bar-icons span:hover { background: #f3f2f1; color: #201f1e; }
+
+  /* Quick links */
+  .quick-links {
+    background: #fff;
+    border-bottom: 1px solid #edebe9;
+    padding: 6px 24px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .quick-link {
+    font-size: 13px;
+    color: #0078d4;
+    cursor: pointer;
+    padding: 3px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .quick-link:hover { text-decoration: underline; }
+  .quick-link.active { font-weight: 600; color: #005a9e; }
+  .ql-sep { color: #c8c6c4; padding: 0; }
+
+  /* ═══════════════════════════════════════════════
+     MAIN CONTENT AREA
+  ═══════════════════════════════════════════════ */
+  .main {
+    padding: 4px 24px 24px;
+    max-width: 1600px;
+  }
+
+  /* Hero + Actions */
+  .hero-row {
+    display: flex;
+    gap: 24px;
+    padding: 20px 0 20px;
+    align-items: flex-start;
+  }
+  .hero-summary {
+    flex: 1;
+    max-width: 640px;
+  }
+  .hero-label {
+    font-size: 11px;
+    color: #605e5c;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .hero-headline {
+    font-size: 34px;
+    font-weight: 300;
+    color: #201f1e;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .hero-headline .teal {
+    color: #008272;
+    font-weight: 400;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: #008272;
+    font-weight: 500;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8c6c4;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .hero-dot.active { background: #0078d4; }
+  .hero-dot:hover { background: #605e5c; }
+
+  .actions-panel {
+    width: 380px;
+    flex-shrink: 0;
+  }
+  .actions-label {
+    font-size: 11px;
+    color: #605e5c;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 8px;
+    column-gap: 16px;
+  }
+  .action-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 0;
+    font-size: 13px;
+    color: #0078d4;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .action-item:hover { text-decoration: underline; }
+  .action-item .pfx {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1;
+    color: #008272;
+    display: inline-block;
+    width: 12px;
+  }
+  .action-item.arrow .pfx { color: #0078d4; }
+
+  /* ═══════════════════════════════════════════════
+     SECTION HEADERS
+  ═══════════════════════════════════════════════ */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 10px;
+    padding-top: 6px;
+    border-top: 1px solid #edebe9;
+    padding-bottom: 2px;
+  }
+  .section-header.no-border {
+    border-top: none;
+    padding-top: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #201f1e;
+    padding-top: 6px;
+  }
+  .section-caret { font-size: 10px; color: #605e5c; cursor: pointer; padding-top: 6px; }
+  .section-more {
+    margin-left: auto;
+    font-size: 12px;
+    color: #605e5c;
+    cursor: pointer;
+    padding-top: 6px;
+  }
+  .section-more:hover { color: #201f1e; }
+
+  /* KPI Activities */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .kpi-card {
+    background: #fff;
+    border: 1px solid #edebe9;
+    padding: 16px 18px 0;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+  }
+  .kpi-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+  .kpi-label {
+    font-size: 12px;
+    color: #605e5c;
+    margin-bottom: 6px;
+    line-height: 1.35;
+    max-width: 200px;
+  }
+  .kpi-value {
+    font-size: 32px;
+    font-weight: 300;
+    color: #201f1e;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .kpi-value.alert { color: #a4262c; }
+  .kpi-value.warning { color: #b58600; }
+  .kpi-see-more {
+    font-size: 13px;
+    color: #0078d4;
+    cursor: pointer;
+    padding-bottom: 12px;
+    margin-top: auto;
+  }
+  .kpi-see-more:hover { text-decoration: underline; }
+  .kpi-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: #008272;
+    width: 65%;
+  }
+  .kpi-card.alert-bar .kpi-bar { background: #f0b400; width: 40%; }
+  .kpi-card.warn-bar .kpi-bar { background: #f0b400; width: 55%; }
+  .kpi-card.green-bar .kpi-bar { background: #92d050; width: 80%; }
+  .kpi-card.red-bar .kpi-bar { background: #a4262c; width: 20%; }
+  .kpi-tooltip {
+    display: none;
+    position: absolute;
+    top: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #201f1e;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .kpi-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    border: 4px solid transparent;
+    border-top-color: #201f1e;
+  }
+  .kpi-card:hover .kpi-tooltip { display: block; }
+
+  /* ═══════════════════════════════════════════════
+     AGENT TILE GROUPS (mirroring D365 tile layout)
+  ═══════════════════════════════════════════════ */
+  .tile-groups {
+    display: grid;
+    grid-template-columns: 3fr 3fr 3fr 1fr;
+    gap: 20px;
+    margin-bottom: 22px;
+  }
+  .tile-group-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #201f1e;
+    margin-bottom: 6px;
+    padding: 0 2px;
+  }
+  .tile-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 8px;
+  }
+  .agent-tile {
+    background: #008272;
+    color: #fff;
+    padding: 12px 12px 10px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s, transform 0.1s;
+    overflow: hidden;
+    min-height: 118px;
+    display: flex;
+    flex-direction: column;
+  }
+  .agent-tile:hover { background: #006b5e; }
+  .agent-tile.active-tile { background: #005a4e; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35); }
+  .agent-tile-name {
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    min-height: 30px;
+  }
+  .agent-tile-count {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .agent-tile-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.18);
+    margin-bottom: 6px;
+    align-self: flex-start;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-dot.green { background: #92d050; box-shadow: 0 0 5px #92d050; animation: pulse 2s infinite; }
+  .status-dot.amber { background: #ffc000; box-shadow: 0 0 5px #ffc000; }
+  .status-dot.red   { background: #ff6b6b; box-shadow: 0 0 5px #ff4444; animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .agent-tile-layman {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+    line-height: 1.35;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    flex: 1;
+  }
+  .agent-tile-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.75);
+    margin-top: auto;
+    padding-top: 4px;
+  }
+  .agent-tile-chevron {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* Scan / upload docs (rightmost cell) */
+  .scan-cell {
+    background: #fff;
+    border: 1px solid #edebe9;
+    padding: 12px;
+    text-align: center;
+    min-height: 118px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  .scan-cell:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  .scan-cell .scan-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #605e5c;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #605e5c;
+    margin-bottom: 8px;
+  }
+  .scan-cell:hover .scan-icon { color: #0078d4; border-color: #0078d4; }
+  .scan-cell-lbl {
+    font-size: 11.5px;
+    color: #201f1e;
+    line-height: 1.3;
+  }
+
+  /* Agent Drawer */
+  .agent-drawer {
+    display: none;
+    background: #f0faf9;
+    border: 1px solid #008272;
+    border-top: 3px solid #008272;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    animation: slideDown 0.2s ease;
+  }
+  .agent-drawer.open { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .drawer-title { font-size: 14px; font-weight: 600; color: #201f1e; }
+  .drawer-close {
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 16px;
+    color: #605e5c;
+    line-height: 1;
+  }
+  .drawer-close:hover { color: #201f1e; }
+  .drawer-log { margin-bottom: 14px; }
+  .drawer-log-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #605e5c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .log-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid #d5edea;
+    font-size: 12.5px;
+  }
+  .log-time { color: #605e5c; white-space: nowrap; font-size: 11px; min-width: 88px; }
+  .log-text { color: #201f1e; flex: 1; }
+  .log-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge-done { background: #dff6dd; color: #107c10; }
+  .badge-proc { background: #fff4ce; color: #7d5a00; }
+  .badge-flag { background: #fde7e9; color: #a4262c; }
+  .ask-agent {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #d5edea;
+  }
+  .ask-agent input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid #c8c6c4;
+    border-radius: 2px;
+    font-size: 12.5px;
+    font-family: inherit;
+    color: #201f1e;
+    outline: none;
+    background: #fff;
+  }
+  .ask-agent input:focus { border-color: #0078d4; }
+  .ask-btn {
+    padding: 7px 16px;
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+  }
+  .ask-btn:hover { background: #106ebe; }
+
+  /* ═══════════════════════════════════════════════
+     END-TO-END PROCESS AGENTS
+  ═══════════════════════════════════════════════ */
+  .process-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .process-card {
+    background: #fff;
+    border: 1px solid #edebe9;
+    border-top: 3px solid #0078d4;
+    padding: 16px;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  .process-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+  .process-card:nth-child(2) { border-top-color: #8764b8; }
+  .process-card:nth-child(3) { border-top-color: #038387; }
+  .process-agent-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #201f1e;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .process-icon { font-size: 18px; }
+  .process-type {
+    font-size: 10.5px;
+    color: #605e5c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .process-flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    row-gap: 6px;
+  }
+  .flow-step {
+    background: #f3f2f1;
+    border: 1px solid #edebe9;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #201f1e;
+    border-radius: 2px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .flow-arrow {
+    color: #0078d4;
+    font-size: 12px;
+    margin: 0 4px;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+  .process-card:nth-child(2) .flow-arrow { color: #8764b8; }
+  .process-card:nth-child(3) .flow-arrow { color: #038387; }
+  .process-divider {
+    border: none;
+    border-top: 1px solid #edebe9;
+    margin: 10px 0;
+  }
+  .process-layman {
+    font-size: 12px;
+    color: #605e5c;
+    line-height: 1.55;
+    font-style: italic;
+    margin-bottom: 14px;
+    padding-left: 8px;
+    border-left: 2px solid #edebe9;
+  }
+  .process-card:nth-child(1) .process-layman { border-left-color: #0078d4; }
+  .process-card:nth-child(2) .process-layman { border-left-color: #8764b8; }
+  .process-card:nth-child(3) .process-layman { border-left-color: #038387; }
+  .process-stats {
+    display: flex;
+    gap: 16px;
+    padding-top: 4px;
+  }
+  .p-stat { flex: 1; }
+  .p-stat-val { font-size: 22px; font-weight: 300; color: #201f1e; display: block; line-height: 1; }
+  .p-stat-lbl { font-size: 10.5px; color: #605e5c; margin-top: 4px; display: block; }
+  .process-more {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #0078d4;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .process-more:hover { text-decoration: underline; }
+  .process-card:nth-child(2) .process-more { color: #8764b8; }
+  .process-card:nth-child(3) .process-more { color: #038387; }
+
+  /* ═══════════════════════════════════════════════
+     BUSINESS ASSISTANCE (charts row)
+  ═══════════════════════════════════════════════ */
+  .biz-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .biz-card {
+    background: #fff;
+    border: 1px solid #edebe9;
+    padding: 16px 20px;
+  }
+  .biz-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .biz-title { font-size: 14px; font-weight: 600; color: #201f1e; }
+  .biz-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #0078d4;
+  }
+  .biz-actions span { cursor: pointer; }
+  .biz-actions span:hover { text-decoration: underline; }
+  .donut-wrapper { display: flex; align-items: center; gap: 20px; padding: 8px 0; }
+  .donut { flex-shrink: 0; }
+  .donut-legend { flex: 1; font-size: 12.5px; }
+  .donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .legend-lbl { flex: 1; color: #201f1e; }
+  .legend-val { color: #605e5c; font-weight: 500; }
+  .line-chart-wrap { padding: 8px 0; }
+
+  /* ═══════════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════════ */
+  .page-footer {
+    background: #201f1e;
+    color: rgba(255,255,255,0.6);
+    font-size: 11.5px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .footer-text { flex: 1; }
+  .footer-logo {
+    height: 22px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- Backdrop -->
+<div class="backdrop" id="backdrop" onclick="closeAllDropdowns()"></div>
+
+<!-- ═══════════ TOP HEADER BAR ═══════════ -->
+<header class="top-bar">
+  <div class="top-bar-left">
+    <img src="reach-logo.svg" alt="Reach" class="reach-logo">
+    <div class="top-bar-divider"></div>
+    <div class="app-launcher" id="appLauncher" onclick="toggleDropdown('appGrid', this)" title="Apps">
+      <div class="app-launcher-grid">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <span class="d365-title">Dynamics 365 Business Central</span>
+  </div>
+  <div class="top-bar-right">
+    <div class="top-icon" onclick="toast('✓ Page saved to Favourites')" title="Save to favourites">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2h8a1 1 0 0 1 1 1v11.293l-5-3.75-5 3.75V3a1 1 0 0 1 1-1zm0-1a2 2 0 0 0-2 2v13l6-4.5 6 4.5V3a2 2 0 0 0-2-2H4z"/></svg>
+    </div>
+    <div class="top-icon" id="searchBtn" onclick="toggleDropdown('searchPanel', this)" title="Search">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+    </div>
+    <div class="top-icon" id="settingsBtn" onclick="toggleDropdown('settingsPanel', this)" title="Settings">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.892 3.433-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.892-1.64-.901-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/></svg>
+    </div>
+    <div class="top-icon" id="notifBtn" onclick="toggleDropdown('notifPanel', this)" title="Notifications">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/></svg>
+      <span class="badge"></span>
+    </div>
+    <div class="top-icon" id="helpBtn" onclick="toggleDropdown('helpPanel', this)" title="Help">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/></svg>
+    </div>
+    <div class="top-avatar" id="avatarBtn" onclick="toggleDropdown('userPanel', this)" title="Imran Khan">IK</div>
+    <div class="cognizant-divider"></div>
+    <img src="Cognizantlogo.png" alt="Cognizant" class="cognizant-logo">
+  </div>
+</header>
+
+<!-- ═══════════ TOP BAR DROPDOWNS ═══════════ -->
+
+<!-- App launcher grid -->
+<div class="app-grid-panel" id="appGrid">
+  <div class="app-grid-title">Reach × D365 Apps</div>
+  <div class="app-grid">
+    <div class="app-grid-item" onclick="toast('Opening Finance workspace…')"><span class="app-emoji">💼</span>Finance</div>
+    <div class="app-grid-item" onclick="toast('Opening Sales workspace…')"><span class="app-emoji">💹</span>Sales</div>
+    <div class="app-grid-item" onclick="toast('Opening Purchasing workspace…')"><span class="app-emoji">📦</span>Purchasing</div>
+    <div class="app-grid-item" onclick="toast('Opening Reports…')"><span class="app-emoji">📊</span>Reports</div>
+    <div class="app-grid-item" onclick="toast('Opening Agents…')"><span class="app-emoji">🤖</span>Agents</div>
+    <div class="app-grid-item" onclick="toast('Opening Admin Centre…')"><span class="app-emoji">⚙️</span>Admin</div>
+    <div class="app-grid-item" onclick="toast('Opening Shopify connector…')"><span class="app-emoji">🛒</span>Shopify</div>
+    <div class="app-grid-item" onclick="toast('Opening Power BI…')"><span class="app-emoji">📈</span>Power BI</div>
+    <div class="app-grid-item" onclick="toast('Opening Copilot chat…')"><span class="app-emoji">💬</span>Copilot</div>
+  </div>
+</div>
+
+<!-- Search panel -->
+<div class="search-panel" id="searchPanel">
+  <input type="text" class="search-input" placeholder="Search agents, invoices, vendors…" id="searchInput" onkeydown="if(event.key==='Enter'){toast('Searching for: '+this.value); closeAllDropdowns();}">
+  <div class="search-hint">Press Enter to search across all agents and data</div>
+  <div class="search-suggest">
+    <div class="search-suggest-title">Suggested</div>
+    <span class="search-chip" onclick="fillSearch('overdue invoices')">overdue invoices</span>
+    <span class="search-chip" onclick="fillSearch('creator #4471')">creator #4471</span>
+    <span class="search-chip" onclick="fillSearch('tax filings')">tax filings</span>
+    <span class="search-chip" onclick="fillSearch('AP exceptions')">AP exceptions</span>
+    <span class="search-chip" onclick="fillSearch('close status')">close status</span>
+  </div>
+</div>
+
+<!-- Settings panel -->
+<div class="dropdown" id="settingsPanel">
+  <div class="dropdown-header">Settings <span class="dropdown-close" onclick="closeAllDropdowns()">✕</span></div>
+  <div class="dropdown-body">
+    <div class="dropdown-item" onclick="toast('Preferences opened')"><div class="item-icon">⚙️</div><div class="item-body"><div class="item-title">My Preferences</div><div class="item-desc">Language, date format, region</div></div></div>
+    <div class="dropdown-item" onclick="toast('Agent settings opened')"><div class="item-icon">🤖</div><div class="item-body"><div class="item-title">Agent Configuration</div><div class="item-desc">Enable/disable agents, tune thresholds</div></div></div>
+    <div class="dropdown-item" onclick="toast('Role centre changed')"><div class="item-icon">👤</div><div class="item-body"><div class="item-title">Role Centre</div><div class="item-desc">Currently: Finance Manager</div></div></div>
+    <div class="dropdown-item" onclick="toast('Personalise mode on')"><div class="item-icon">🎨</div><div class="item-body"><div class="item-title">Personalise this Page</div><div class="item-desc">Rearrange tiles and KPIs</div></div></div>
+    <div class="dropdown-item" onclick="toast('Design mode enabled')"><div class="item-icon">✏️</div><div class="item-body"><div class="item-title">Design</div><div class="item-desc">For administrators</div></div></div>
+  </div>
+</div>
+
+<!-- Notifications panel -->
+<div class="dropdown" id="notifPanel">
+  <div class="dropdown-header">Notifications (4) <span class="dropdown-close" onclick="closeAllDropdowns()">✕</span></div>
+  <div class="dropdown-body">
+    <div class="dropdown-item" onclick="scrollAgent('drawer-tax'); closeAllDropdowns();"><div class="item-icon" style="background:#fde7e9;">⚠️</div><div class="item-body"><div class="item-title">Tax &amp; Compliance Agent</div><div class="item-desc">3 VAT returns due 30 Sep require your sign-off</div><div class="item-time">2 min ago</div></div></div>
+    <div class="dropdown-item" onclick="scrollAgent('drawer-collections'); closeAllDropdowns();"><div class="item-icon" style="background:#fff4ce;">💳</div><div class="item-body"><div class="item-title">Collections Agent</div><div class="item-desc">Account #8823 escalated — 90+ days overdue, $42K</div><div class="item-time">18 min ago</div></div></div>
+    <div class="dropdown-item" onclick="scrollAgent('drawer-royalty'); closeAllDropdowns();"><div class="item-icon" style="background:#deecf9;">🎵</div><div class="item-body"><div class="item-title">Royalty Agent</div><div class="item-desc">Creator #4471 flagged — rate mismatch vs contract v2.1</div><div class="item-time">1 hr ago</div></div></div>
+    <div class="dropdown-item" onclick="toast('Opened Close Agent details')"><div class="item-icon" style="background:#dff6dd;">📊</div><div class="item-body"><div class="item-title">Close &amp; Consolidation Agent</div><div class="item-desc">6 of 8 entities closed. 2 pending — target Sep 30</div><div class="item-time">3 hr ago</div></div></div>
+  </div>
+</div>
+
+<!-- Help panel -->
+<div class="dropdown" id="helpPanel">
+  <div class="dropdown-header">Help &amp; Demo Guide <span class="dropdown-close" onclick="closeAllDropdowns()">✕</span></div>
+  <div class="dropdown-body">
+    <div class="dropdown-item" onclick="toast('Opening product tour…')"><div class="item-icon">🚀</div><div class="item-body"><div class="item-title">Product Tour</div><div class="item-desc">4-minute walkthrough of REACH agents</div></div></div>
+    <div class="dropdown-item" onclick="toast('Opening documentation…')"><div class="item-icon">📚</div><div class="item-body"><div class="item-title">Documentation</div><div class="item-desc">How agents work under the hood</div></div></div>
+    <div class="dropdown-item" onclick="toast('Opening USAGE.md — see project folder')"><div class="item-icon">📖</div><div class="item-body"><div class="item-title">Demo Script (USAGE.md)</div><div class="item-desc">Talk-track for stakeholder demos</div></div></div>
+    <div class="dropdown-item" onclick="toast('Opening Copilot chat…')"><div class="item-icon">💬</div><div class="item-body"><div class="item-title">Ask Copilot</div><div class="item-desc">Natural-language help across the platform</div></div></div>
+    <div class="dropdown-item" onclick="toast('Support ticket drafted')"><div class="item-icon">🎧</div><div class="item-body"><div class="item-title">Contact Support</div><div class="item-desc">24/7 Cognizant support</div></div></div>
+  </div>
+</div>
+
+<!-- User panel -->
+<div class="dropdown" id="userPanel">
+  <div class="dropdown-header">Imran Khan <span class="dropdown-close" onclick="closeAllDropdowns()">✕</span></div>
+  <div class="dropdown-body">
+    <div style="padding: 4px 16px 12px; font-size: 12px; color: #605e5c; border-bottom: 1px solid #edebe9; margin-bottom: 4px;">
+      imran.khan21@cognizant.com<br>
+      <span style="color:#008272; font-weight:600;">● Online</span> · Finance Manager
+    </div>
+    <div class="dropdown-item" onclick="toast('Profile opened')"><div class="item-icon">👤</div><div class="item-body"><div class="item-title">My Profile</div></div></div>
+    <div class="dropdown-item" onclick="toast('Switching account…')"><div class="item-icon">🔄</div><div class="item-body"><div class="item-title">Switch Account</div></div></div>
+    <div class="dropdown-item" onclick="toast('Signed out')"><div class="item-icon">🚪</div><div class="item-body"><div class="item-title">Sign Out</div></div></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="check">✓</span><span id="toastMsg">Saved</span></div>
+
+<!-- ═══════════ NAV / COMPANY BAR ═══════════ -->
+<nav class="nav-bar">
+  <div class="company-row">
+    <div class="company-name" onclick="event.stopPropagation(); toggleCompanyMenu(event)">
+      REACH Finance AI Platform <span class="caret">▾</span>
+      <div class="company-menu" id="companyMenu">
+        <div class="company-menu-title">Switch Entity</div>
+        <div class="company-menu-item active" onclick="switchEntity(this,'REACH Finance AI Platform')">REACH Finance AI Platform <span class="tick">✓</span></div>
+        <div class="company-menu-item" onclick="switchEntity(this,'REACH EMEA Ltd.')">REACH EMEA Ltd.</div>
+        <div class="company-menu-item" onclick="switchEntity(this,'REACH APAC Pte.')">REACH APAC Pte.</div>
+        <div class="company-menu-item" onclick="switchEntity(this,'REACH US Holdings, Inc.')">REACH US Holdings, Inc.</div>
+      </div>
+    </div>
+    <div class="nav-bar-icons">
+      <span title="Personalise" onclick="toast('Personalise mode toggled')">⊞</span>
+      <span title="Full screen" onclick="toast('Full screen mode')">⛶</span>
+    </div>
+  </div>
+  <div class="nav-row">
+    <div class="nav-tabs" id="navTabs">
+      <div class="nav-tab active" onclick="setTab(this,'Royalties')">Royalties <span class="caret">▾</span></div>
+      <div class="nav-tab" onclick="setTab(this,'Collections')">Collections <span class="caret">▾</span></div>
+      <div class="nav-tab" onclick="setTab(this,'Billing & Rebate')">Billing &amp; Rebate <span class="caret">▾</span></div>
+      <div class="nav-tab" onclick="setTab(this,'Tax & Compliance')">Tax &amp; Compliance <span class="caret">▾</span></div>
+      <div class="nav-tab" onclick="setTab(this,'Controls')">Controls <span class="caret">▾</span></div>
+      <div class="nav-tab-sep"></div>
+      <div class="nav-tab" onclick="toast('Additional menu opened')">☰</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ QUICK LINKS ═══════════ -->
+<div class="quick-links">
+  <a class="quick-link active" href="#" onclick="setQuick(this,event)">All Agents</a>
+  <span class="ql-sep">|</span>
+  <a class="quick-link" href="#" onclick="setQuick(this,event)">Active Now</a>
+  <span class="ql-sep">|</span>
+  <a class="quick-link" href="#" onclick="setQuick(this,event)">Alerts</a>
+  <span class="ql-sep">|</span>
+  <a class="quick-link" href="#" onclick="setQuick(this,event)">Reports</a>
+  <span class="ql-sep">|</span>
+  <a class="quick-link" href="#" onclick="setQuick(this,event)">Audit Trail</a>
+  <span class="ql-sep">|</span>
+  <a class="quick-link" href="#" onclick="setQuick(this,event)">Agent Config</a>
+</div>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<div class="main">
+
+  <!-- Hero + Actions -->
+  <div class="hero-row">
+    <div class="hero-summary">
+      <div class="hero-label">Summary</div>
+      <div class="hero-headline">
+        Since yesterday your agents<br>
+        have processed <span class="teal">$3.4M</span> of finance activity
+      </div>
+      <div class="hero-sub">✓ 0 unreviewed exceptions · 8 agents online</div>
+      <div class="hero-dots">
+        <div class="hero-dot active" onclick="setDot(this,0)"></div>
+        <div class="hero-dot" onclick="setDot(this,1)"></div>
+        <div class="hero-dot" onclick="setDot(this,2)"></div>
+      </div>
+    </div>
+    <div class="actions-panel">
+      <div class="actions-label">Actions</div>
+      <div class="actions-grid">
+        <div class="action-item" onclick="toast('Triggering agent run…')"><span class="pfx">+</span> Agent Run</div>
+        <div class="action-item" onclick="toast('Draft tax filing opened')"><span class="pfx">+</span> Tax Filing</div>
+        <div class="action-item arrow" onclick="toast('Loading agent logs…')"><span class="pfx">›</span> Agent Logs</div>
+        <div class="action-item" onclick="toast('New exception opened')"><span class="pfx">+</span> Exception</div>
+        <div class="action-item" onclick="toast('New vendor query')"><span class="pfx">+</span> Vendor Query</div>
+        <div class="action-item arrow" onclick="toast('Loading dashboard…')"><span class="pfx">›</span> Dashboard</div>
+        <div class="action-item" onclick="toast('New rebate calc opened')"><span class="pfx">+</span> Rebate</div>
+        <div class="action-item" onclick="toast('New close checklist')"><span class="pfx">+</span> Close Cycle</div>
+        <div class="action-item arrow" onclick="toast('Exporting to Excel…')"><span class="pfx">›</span> Excel</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activities / KPI cards -->
+  <div class="section-header">
+    <span class="section-title">Activities</span>
+    <span class="section-caret">▾</span>
+    <span class="section-more" onclick="toast('Loading full activity feed…')">•••</span>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card" onclick="toast('Royalty details opened')">
+      <div class="kpi-tooltip">↑ 12% vs last month</div>
+      <div class="kpi-label">Royalties Processed This Month</div>
+      <div class="kpi-value">$2.4M</div>
+      <div class="kpi-see-more">› See More</div>
+      <div class="kpi-bar"></div>
+    </div>
+    <div class="kpi-card alert-bar" onclick="toast('Collections details opened')">
+      <div class="kpi-tooltip">14 accounts flagged for follow-up</div>
+      <div class="kpi-label">Outstanding Collections</div>
+      <div class="kpi-value alert">$847K</div>
+      <div class="kpi-see-more">› See More</div>
+      <div class="kpi-bar"></div>
+    </div>
+    <div class="kpi-card warn-bar" onclick="toast('Tax details opened')">
+      <div class="kpi-tooltip">Next due: 30 Sep 2026</div>
+      <div class="kpi-label">Pending Tax Filings</div>
+      <div class="kpi-value warning">12</div>
+      <div class="kpi-see-more">› See More</div>
+      <div class="kpi-bar"></div>
+    </div>
+    <div class="kpi-card green-bar" onclick="toast('Rebate details opened')">
+      <div class="kpi-tooltip">8 rebates pending approval</div>
+      <div class="kpi-label">Rebates Calculated</div>
+      <div class="kpi-value">$156K</div>
+      <div class="kpi-see-more">› See More</div>
+      <div class="kpi-bar"></div>
+    </div>
+  </div>
+
+  <!-- Agent Tile Groups (mirrors D365 Ongoing Sales/Purchases/Payments/Scan layout) -->
+  <div class="tile-groups">
+
+    <!-- Revenue Agents -->
+    <div>
+      <div class="tile-group-label">Revenue Agents</div>
+      <div class="tile-row">
+        <div class="agent-tile" onclick="toggleDrawer('drawer-royalty', this)">
+          <div class="agent-tile-name">Royalty &amp; Creator Agent</div>
+          <div class="agent-tile-status"><span class="status-dot green"></span>Active</div>
+          <div class="agent-tile-count">34</div>
+          <div class="agent-tile-layman">Reconciling creator royalties against contracts</div>
+          <div class="agent-tile-foot"><span>reconciled today</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+        <div class="agent-tile" onclick="toggleDrawer('drawer-collections', this)">
+          <div class="agent-tile-name">Collections / Credit Agent</div>
+          <div class="agent-tile-status"><span class="status-dot amber"></span>Processing</div>
+          <div class="agent-tile-count">14</div>
+          <div class="agent-tile-layman">Chasing overdue invoices, flagging risk accounts</div>
+          <div class="agent-tile-foot"><span>accounts in pursuit</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operations Agents -->
+    <div>
+      <div class="tile-group-label">Operations Agents</div>
+      <div class="tile-row">
+        <div class="agent-tile" onclick="toggleDrawer('drawer-billing', this)">
+          <div class="agent-tile-name">Billing &amp; Rebate Agent</div>
+          <div class="agent-tile-status"><span class="status-dot green"></span>Active</div>
+          <div class="agent-tile-count">8</div>
+          <div class="agent-tile-layman">Generating billing runs &amp; rebate accruals</div>
+          <div class="agent-tile-foot"><span>rebates calculated</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+        <div class="agent-tile" onclick="toggleDrawer('drawer-tax', this)">
+          <div class="agent-tile-name">Tax &amp; Compliance Agent</div>
+          <div class="agent-tile-status"><span class="status-dot red"></span>Review</div>
+          <div class="agent-tile-count">3</div>
+          <div class="agent-tile-layman">Monitoring tax obligations &amp; filing schedules</div>
+          <div class="agent-tile-foot"><span>items need review</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Governance Agents -->
+    <div>
+      <div class="tile-group-label">Governance</div>
+      <div class="tile-row">
+        <div class="agent-tile" onclick="toggleDrawer('drawer-controls', this)">
+          <div class="agent-tile-name">Controls &amp; Access Agent</div>
+          <div class="agent-tile-status"><span class="status-dot green"></span>Active</div>
+          <div class="agent-tile-count">0</div>
+          <div class="agent-tile-layman">Enforcing SoD, reviewing access anomalies</div>
+          <div class="agent-tile-foot"><span>anomalies found</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+        <div class="agent-tile" style="background:#605e5c;" onclick="toast('Copilot chat opened')"
+             onmouseover="this.style.background='#4a4846'" onmouseout="this.style.background='#605e5c'">
+          <div class="agent-tile-name">+ Add Agent</div>
+          <div class="agent-tile-status" style="background:rgba(255,255,255,0.2);">Marketplace</div>
+          <div class="agent-tile-count" style="font-size:22px;">✨</div>
+          <div class="agent-tile-layman">Browse the agent library and deploy new capabilities</div>
+          <div class="agent-tile-foot"><span>12 available</span><span class="agent-tile-chevron">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scan / Upload docs -->
+    <div>
+      <div class="tile-group-label">Scan documents</div>
+      <div class="scan-cell" onclick="toast('Opening document scanner…')">
+        <div class="scan-icon">📷</div>
+        <div class="scan-cell-lbl">Scan invoice or contract</div>
+      </div>
+    </div>
+
+  </div><!-- /tile-groups -->
+
+  <!-- Agent Drawers -->
+  <div class="agent-drawer" id="drawer-royalty">
+    <div class="drawer-header">
+      <span style="font-size:20px;">🎵</span>
+      <span class="drawer-title">Royalty &amp; Creator Agent — Activity Log</span>
+      <span class="drawer-close" onclick="closeDrawer('drawer-royalty')">✕</span>
+    </div>
+    <div class="drawer-log">
+      <div class="drawer-log-title">Recent Actions</div>
+      <div class="log-item"><span class="log-time">09:42 today</span><span class="log-text">Reconciled 12 royalty statements for Q3 against master contracts</span><span class="log-badge badge-done">Done</span></div>
+      <div class="log-item"><span class="log-time">09:15 today</span><span class="log-text">Flagged 2 discrepancies on Creator ID #4471 — rate mismatch vs contract v2.1</span><span class="log-badge badge-flag">Flagged</span></div>
+      <div class="log-item"><span class="log-time">08:30 today</span><span class="log-text">Generated monthly royalty accrual journal entries for 22 creators</span><span class="log-badge badge-done">Done</span></div>
+    </div>
+    <div class="ask-agent">
+      <input type="text" placeholder="Ask this agent something… e.g. 'Show me royalties for Creator #4471'" onkeydown="if(event.key==='Enter'){toast('Agent thinking… (demo)'); this.value=''; }">
+      <button class="ask-btn" onclick="toast('Agent thinking… (demo)')">Ask</button>
+    </div>
+  </div>
+
+  <div class="agent-drawer" id="drawer-collections">
+    <div class="drawer-header">
+      <span style="font-size:20px;">💳</span>
+      <span class="drawer-title">Collections / Credit Agent — Activity Log</span>
+      <span class="drawer-close" onclick="closeDrawer('drawer-collections')">✕</span>
+    </div>
+    <div class="drawer-log">
+      <div class="drawer-log-title">Recent Actions</div>
+      <div class="log-item"><span class="log-time">10:05 today</span><span class="log-text">Sent automated payment reminder to 6 accounts (30+ days overdue)</span><span class="log-badge badge-proc">In Progress</span></div>
+      <div class="log-item"><span class="log-time">09:50 today</span><span class="log-text">Escalated account #8823 to Credit Manager — balance $42K, 90+ days</span><span class="log-badge badge-flag">Escalated</span></div>
+      <div class="log-item"><span class="log-time">08:00 today</span><span class="log-text">Updated credit risk scores for 47 customer accounts</span><span class="log-badge badge-done">Done</span></div>
+    </div>
+    <div class="ask-agent">
+      <input type="text" placeholder="Ask this agent something… e.g. 'Which accounts are most at risk?'" onkeydown="if(event.key==='Enter'){toast('Agent thinking… (demo)'); this.value=''; }">
+      <button class="ask-btn" onclick="toast('Agent thinking… (demo)')">Ask</button>
+    </div>
+  </div>
+
+  <div class="agent-drawer" id="drawer-billing">
+    <div class="drawer-header">
+      <span style="font-size:20px;">🧾</span>
+      <span class="drawer-title">Billing &amp; Rebate Agent — Activity Log</span>
+      <span class="drawer-close" onclick="closeDrawer('drawer-billing')">✕</span>
+    </div>
+    <div class="drawer-log">
+      <div class="drawer-log-title">Recent Actions</div>
+      <div class="log-item"><span class="log-time">09:30 today</span><span class="log-text">Completed monthly billing run — 156 invoices generated, $1.2M total</span><span class="log-badge badge-done">Done</span></div>
+      <div class="log-item"><span class="log-time">09:00 today</span><span class="log-text">Calculated Q3 volume rebates for 8 distribution partners</span><span class="log-badge badge-proc">Pending Approval</span></div>
+      <div class="log-item"><span class="log-time">Yesterday</span><span class="log-text">Identified 3 billing errors from prior period — raised credit notes automatically</span><span class="log-badge badge-done">Done</span></div>
+    </div>
+    <div class="ask-agent">
+      <input type="text" placeholder="Ask this agent something… e.g. 'What rebates are pending approval?'" onkeydown="if(event.key==='Enter'){toast('Agent thinking… (demo)'); this.value=''; }">
+      <button class="ask-btn" onclick="toast('Agent thinking… (demo)')">Ask</button>
+    </div>
+  </div>
+
+  <div class="agent-drawer" id="drawer-tax">
+    <div class="drawer-header">
+      <span style="font-size:20px;">📋</span>
+      <span class="drawer-title">Tax &amp; Compliance Agent — Activity Log</span>
+      <span class="drawer-close" onclick="closeDrawer('drawer-tax')">✕</span>
+    </div>
+    <div class="drawer-log">
+      <div class="drawer-log-title">Recent Actions</div>
+      <div class="log-item"><span class="log-time">10:15 today</span><span class="log-text">Identified 3 VAT returns approaching deadline (30 Sep) — awaiting sign-off</span><span class="log-badge badge-flag">Action Required</span></div>
+      <div class="log-item"><span class="log-time">09:45 today</span><span class="log-text">Cross-referenced transactions against HMRC Making Tax Digital requirements</span><span class="log-badge badge-done">Done</span></div>
+      <div class="log-item"><span class="log-time">08:45 today</span><span class="log-text">Prepared draft corporation tax schedules for FY2026 period</span><span class="log-badge badge-proc">In Review</span></div>
+    </div>
+    <div class="ask-agent">
+      <input type="text" placeholder="Ask this agent something… e.g. 'What's due for submission this month?'" onkeydown="if(event.key==='Enter'){toast('Agent thinking… (demo)'); this.value=''; }">
+      <button class="ask-btn" onclick="toast('Agent thinking… (demo)')">Ask</button>
+    </div>
+  </div>
+
+  <div class="agent-drawer" id="drawer-controls">
+    <div class="drawer-header">
+      <span style="font-size:20px;">🔐</span>
+      <span class="drawer-title">Controls &amp; Access Agent — Activity Log</span>
+      <span class="drawer-close" onclick="closeDrawer('drawer-controls')">✕</span>
+    </div>
+    <div class="drawer-log">
+      <div class="drawer-log-title">Recent Actions</div>
+      <div class="log-item"><span class="log-time">09:55 today</span><span class="log-text">Completed daily SoD conflict scan across 84 active user roles — 0 violations</span><span class="log-badge badge-done">Clean</span></div>
+      <div class="log-item"><span class="log-time">09:20 today</span><span class="log-text">Reviewed 5 new access provisioning requests — 4 approved, 1 escalated</span><span class="log-badge badge-proc">1 Pending</span></div>
+      <div class="log-item"><span class="log-time">Yesterday</span><span class="log-text">Generated quarterly access certification report for CISO review</span><span class="log-badge badge-done">Done</span></div>
+    </div>
+    <div class="ask-agent">
+      <input type="text" placeholder="Ask this agent something… e.g. 'Show users with conflicting roles'" onkeydown="if(event.key==='Enter'){toast('Agent thinking… (demo)'); this.value=''; }">
+      <button class="ask-btn" onclick="toast('Agent thinking… (demo)')">Ask</button>
+    </div>
+  </div>
+
+  <!-- End-to-End Process Agents -->
+  <div class="section-header">
+    <span class="section-title">End-to-End Process Agents</span>
+    <span class="section-caret">▾</span>
+    <span class="section-more" onclick="toast('Loading all process agents…')">See All (3)</span>
+  </div>
+  <div class="process-cards">
+
+    <div class="process-card" onclick="toast('AP Exception Agent workspace opened')">
+      <div class="process-agent-name"><span class="process-icon">⚡</span> AP Exception Agent</div>
+      <div class="process-type">Accounts Payable · End-to-End</div>
+      <div class="process-flow">
+        <span class="flow-step">Invoice Matching</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Exception Detection</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Vendor Escalation</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Resolution Tracking</span>
+      </div>
+      <hr class="process-divider">
+      <div class="process-layman">"I catch invoices that don't match POs, find out why, and chase them to closure — so your AP team only touches real problems."</div>
+      <div class="process-stats">
+        <div class="p-stat"><span class="p-stat-val">247</span><span class="p-stat-lbl">Invoices Matched</span></div>
+        <div class="p-stat"><span class="p-stat-val" style="color:#a4262c;">8</span><span class="p-stat-lbl">Exceptions Open</span></div>
+        <div class="p-stat"><span class="p-stat-val">94%</span><span class="p-stat-lbl">Auto-Resolved</span></div>
+      </div>
+      <span class="process-more">› Open Agent View</span>
+    </div>
+
+    <div class="process-card" onclick="toast('Vendor Query Agent workspace opened')">
+      <div class="process-agent-name"><span class="process-icon">🤝</span> Vendor Query Agent</div>
+      <div class="process-type">Procurement · End-to-End</div>
+      <div class="process-flow">
+        <span class="flow-step">Vendor Portal</span><span class="flow-arrow">→</span>
+        <span class="flow-step">PO Status</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Payment Enquiry</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Dispute Logging</span>
+      </div>
+      <hr class="process-divider">
+      <div class="process-layman">"I answer vendor questions about orders and payments 24/7, and escalate anything I can't resolve to your procurement team."</div>
+      <div class="process-stats">
+        <div class="p-stat"><span class="p-stat-val">63</span><span class="p-stat-lbl">Queries Today</span></div>
+        <div class="p-stat"><span class="p-stat-val">58</span><span class="p-stat-lbl">Auto-Answered</span></div>
+        <div class="p-stat"><span class="p-stat-val" style="color:#7d5a00;">5</span><span class="p-stat-lbl">Escalated</span></div>
+      </div>
+      <span class="process-more">› Open Agent View</span>
+    </div>
+
+    <div class="process-card" onclick="toast('Close &amp; Consolidation Agent workspace opened')">
+      <div class="process-agent-name"><span class="process-icon">📊</span> Close &amp; Consolidation Agent</div>
+      <div class="process-type">Financial Close · End-to-End</div>
+      <div class="process-flow">
+        <span class="flow-step">Sub-Ledger Close</span><span class="flow-arrow">→</span>
+        <span class="flow-step">IC Elimination</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Consolidation</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Reporting Pack</span>
+      </div>
+      <hr class="process-divider">
+      <div class="process-layman">"I coordinate the month-end close sequence, eliminate intercompany entries, and produce the consolidated reporting pack — on time, every time."</div>
+      <div class="process-stats">
+        <div class="p-stat"><span class="p-stat-val">6/8</span><span class="p-stat-lbl">Entities Closed</span></div>
+        <div class="p-stat"><span class="p-stat-val" style="color:#7d5a00;">2</span><span class="p-stat-lbl">Pending</span></div>
+        <div class="p-stat"><span class="p-stat-val">Sep 30</span><span class="p-stat-lbl">Target Close</span></div>
+      </div>
+      <span class="process-more">› Open Agent View</span>
+    </div>
+
+  </div>
+
+  <!-- Business Assistance (charts) -->
+  <div class="section-header">
+    <span class="section-title">Business Assistance</span>
+    <span class="section-caret">▾</span>
+  </div>
+  <div class="biz-row">
+
+    <!-- Donut chart -->
+    <div class="biz-card">
+      <div class="biz-header">
+        <span class="biz-title">Top Agents by Volume This Month</span>
+        <div class="biz-actions"><span onclick="event.stopPropagation(); toast('Loading full breakdown…')">› See All</span><span onclick="event.stopPropagation(); toast('New agent added')">+ Add</span></div>
+      </div>
+      <div class="donut-wrapper">
+        <svg class="donut" width="180" height="180" viewBox="0 0 42 42">
+          <!-- 34% Royalty (0-122) -->
+          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#008272" stroke-width="8"
+                  stroke-dasharray="34 66" stroke-dashoffset="25" transform="rotate(-90 21 21)"/>
+          <!-- 22% Collections (starts at 34) -->
+          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#8764b8" stroke-width="8"
+                  stroke-dasharray="22 78" stroke-dashoffset="-9" transform="rotate(-90 21 21)"/>
+          <!-- 18% Billing (starts at 56) -->
+          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#0078d4" stroke-width="8"
+                  stroke-dasharray="18 82" stroke-dashoffset="-31" transform="rotate(-90 21 21)"/>
+          <!-- 14% Tax (starts at 74) -->
+          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f7630c" stroke-width="8"
+                  stroke-dasharray="14 86" stroke-dashoffset="-49" transform="rotate(-90 21 21)"/>
+          <!-- 12% Controls (starts at 88) -->
+          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#038387" stroke-width="8"
+                  stroke-dasharray="12 88" stroke-dashoffset="-63" transform="rotate(-90 21 21)"/>
+          <text x="21" y="21" text-anchor="middle" dominant-baseline="central" font-size="4.2" font-weight="600" fill="#201f1e">8,412</text>
+          <text x="21" y="26" text-anchor="middle" dominant-baseline="central" font-size="2.4" fill="#605e5c">actions</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="donut-legend-item"><span class="legend-dot" style="background:#008272"></span><span class="legend-lbl">Royalty &amp; Creator</span><span class="legend-val">34%</span></div>
+          <div class="donut-legend-item"><span class="legend-dot" style="background:#8764b8"></span><span class="legend-lbl">Collections / Credit</span><span class="legend-val">22%</span></div>
+          <div class="donut-legend-item"><span class="legend-dot" style="background:#0078d4"></span><span class="legend-lbl">Billing &amp; Rebate</span><span class="legend-val">18%</span></div>
+          <div class="donut-legend-item"><span class="legend-dot" style="background:#f7630c"></span><span class="legend-lbl">Tax &amp; Compliance</span><span class="legend-val">14%</span></div>
+          <div class="donut-legend-item"><span class="legend-dot" style="background:#038387"></span><span class="legend-lbl">Controls &amp; Access</span><span class="legend-val">12%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line chart -->
+    <div class="biz-card">
+      <div class="biz-header">
+        <span class="biz-title">Agent Activity This Year</span>
+        <div class="biz-actions"><span onclick="event.stopPropagation(); toast('Loading trend detail…')">› See All</span><span onclick="event.stopPropagation(); toast('Filter dialog opened')">≡ Filter</span></div>
+      </div>
+      <div style="font-size:24px; font-weight:300; color:#201f1e; padding: 4px 0;">1.4M <span style="font-size:12px; color:#008272; font-weight:600;">↑ 22% YoY</span></div>
+      <div class="line-chart-wrap">
+        <svg width="100%" height="160" viewBox="0 0 500 160" preserveAspectRatio="none">
+          <!-- gridlines -->
+          <line x1="0" y1="40" x2="500" y2="40" stroke="#f3f2f1" stroke-width="1"/>
+          <line x1="0" y1="80" x2="500" y2="80" stroke="#f3f2f1" stroke-width="1"/>
+          <line x1="0" y1="120" x2="500" y2="120" stroke="#f3f2f1" stroke-width="1"/>
+          <!-- Fill -->
+          <path d="M 0 120 L 40 110 L 80 100 L 120 92 L 160 105 L 200 78 L 240 65 L 280 60 L 320 48 L 360 55 L 400 35 L 440 28 L 500 20 L 500 160 L 0 160 Z" fill="#008272" fill-opacity="0.12"/>
+          <!-- Line (agents) -->
+          <path d="M 0 120 L 40 110 L 80 100 L 120 92 L 160 105 L 200 78 L 240 65 L 280 60 L 320 48 L 360 55 L 400 35 L 440 28 L 500 20" stroke="#008272" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Second line (baseline) -->
+          <path d="M 0 135 L 40 130 L 80 128 L 120 125 L 160 120 L 200 118 L 240 115 L 280 112 L 320 105 L 360 100 L 400 92 L 440 88 L 500 82" stroke="#8764b8" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 4"/>
+          <!-- Dots on main line -->
+          <g fill="#008272">
+            <circle cx="0" cy="120" r="3"/><circle cx="80" cy="100" r="3"/>
+            <circle cx="160" cy="105" r="3"/><circle cx="240" cy="65" r="3"/>
+            <circle cx="320" cy="48" r="3"/><circle cx="400" cy="35" r="3"/>
+            <circle cx="500" cy="20" r="3"/>
+          </g>
+        </svg>
+        <div style="display:flex; justify-content:space-between; font-size:10.5px; color:#605e5c; padding:6px 0 0;">
+          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+        </div>
+        <div style="display:flex; gap:16px; padding: 10px 0 0; font-size:11.5px;">
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:2.5px; background:#008272; border-radius:2px;"></span>Actions taken by agents</div>
+          <div style="display:flex; align-items:center; gap:6px;"><span style="width:14px; height:2px; background:#8764b8; border-radius:2px; border-top:1px dashed #fff;"></span>Manual actions (declining)</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /biz-row -->
+
+</div><!-- /main -->
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="page-footer">
+  <span class="footer-text">REACH Finance AI Platform &nbsp;·&nbsp; Powered by Cognizant &amp; Claude AI &nbsp;·&nbsp; 2026</span>
+  <img src="Cognizantlogo.png" alt="Cognizant" class="footer-logo">
+</footer>
+
+<script>
+  /* ═════════ Dropdowns / Top-bar buttons ═════════ */
+  const dropdowns = ['appGrid','searchPanel','settingsPanel','notifPanel','helpPanel','userPanel'];
+  const buttons   = { appGrid:'appLauncher', searchPanel:'searchBtn', settingsPanel:'settingsBtn', notifPanel:'notifBtn', helpPanel:'helpBtn', userPanel:'avatarBtn' };
+
+  function closeAllDropdowns() {
+    dropdowns.forEach(id => document.getElementById(id).classList.remove('open'));
+    Object.values(buttons).forEach(bid => document.getElementById(bid)?.classList.remove('active'));
+    document.getElementById('backdrop').classList.remove('open');
+    document.getElementById('companyMenu')?.classList.remove('open');
+  }
+
+  function toggleDropdown(id, btn) {
+    const el = document.getElementById(id);
+    const wasOpen = el.classList.contains('open');
+    closeAllDropdowns();
+    if (!wasOpen) {
+      el.classList.add('open');
+      const bid = buttons[id];
+      if (bid) document.getElementById(bid).classList.add('active');
+      else if (btn) btn.classList.add('active');
+      document.getElementById('backdrop').classList.add('open');
+      if (id === 'searchPanel') setTimeout(() => document.getElementById('searchInput').focus(), 50);
+    }
+  }
+
+  function fillSearch(text) {
+    const i = document.getElementById('searchInput');
+    i.value = text;
+    i.focus();
+  }
+
+  /* ═════════ Company menu ═════════ */
+  function toggleCompanyMenu(e) {
+    e.stopPropagation();
+    const menu = document.getElementById('companyMenu');
+    const wasOpen = menu.classList.contains('open');
+    closeAllDropdowns();
+    if (!wasOpen) { menu.classList.add('open'); document.getElementById('backdrop').classList.add('open'); }
+  }
+  function switchEntity(el, name) {
+    document.querySelectorAll('.company-menu-item').forEach(i => { i.classList.remove('active'); const t = i.querySelector('.tick'); if (t) t.remove(); });
+    el.classList.add('active');
+    if (!el.querySelector('.tick')) el.insertAdjacentHTML('beforeend', '<span class="tick">✓</span>');
+    document.querySelector('.company-name').childNodes[0].nodeValue = name + ' ';
+    closeAllDropdowns();
+    toast('Switched to ' + name);
+  }
+
+  /* ═════════ Toast ═════════ */
+  let toastTimer = null;
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  /* ═════════ Nav tabs / quick links ═════════ */
+  function setTab(el, name) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    toast('Viewing: ' + name);
+  }
+  function setQuick(el, e) {
+    e.preventDefault();
+    document.querySelectorAll('.quick-link').forEach(q => q.classList.remove('active'));
+    el.classList.add('active');
+    toast('Filter: ' + el.textContent.trim());
+  }
+  function setDot(el, i) {
+    document.querySelectorAll('.hero-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+    const headlines = [
+      ['Since yesterday your agents<br>have processed <span class="teal">$3.4M</span> of finance activity', '✓ 0 unreviewed exceptions · 8 agents online'],
+      ['This month agents auto-resolved<br><span class="teal">94%</span> of AP exceptions', '✓ Only 8 exceptions needed human review'],
+      ['Financial close is <span class="teal">on track</span><br>for Sep 30 target', '✓ 6 of 8 entities closed · 2 pending']
+    ];
+    document.querySelector('.hero-headline').innerHTML = headlines[i][0];
+    document.querySelector('.hero-sub').innerHTML = '✓ ' + headlines[i][1].replace('✓ ','');
+  }
+
+  /* ═════════ Agent Drawers ═════════ */
+  let activeDrawer = null;
+  let activeTile = null;
+  function toggleDrawer(drawerId, tile) {
+    const drawer = document.getElementById(drawerId);
+    if (activeDrawer && activeDrawer !== drawer) {
+      activeDrawer.classList.remove('open');
+      if (activeTile) activeTile.classList.remove('active-tile');
+    }
+    if (drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+      tile.classList.remove('active-tile');
+      activeDrawer = null; activeTile = null;
+    } else {
+      drawer.classList.add('open');
+      tile.classList.add('active-tile');
+      activeDrawer = drawer; activeTile = tile;
+      setTimeout(() => drawer.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+    }
+  }
+  function closeDrawer(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    drawer.classList.remove('open');
+    if (activeTile) activeTile.classList.remove('active-tile');
+    activeDrawer = null; activeTile = null;
+  }
+  function scrollAgent(drawerId) {
+    const drawer = document.getElementById(drawerId);
+    if (!drawer.classList.contains('open')) drawer.classList.add('open');
+    setTimeout(() => drawer.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
+  }
+
+  /* ═════════ Global esc key ═════════ */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllDropdowns(); });
+</script>
+</body>
+</html>

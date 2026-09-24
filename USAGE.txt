@@ -1,0 +1,375 @@
+════════════════════════════════════════════════════════════════════════════════
+  REACH × D365 BUSINESS CENTRAL — AGENTIC FINANCE DEMO
+  Usage guide, click map, and stakeholder demo script
+════════════════════════════════════════════════════════════════════════════════
+
+FILES IN THIS FOLDER
+  reach-d365-agents.html   ← the demo (double-click to open)
+  reach-logo.svg           ← top-left Reach brand logo (yellow on black bar)
+  Cognizantlogo.png        ← top-right + footer brand asset
+  Home.html                ← Reach corporate site (reference)
+  Picture1.png             ← original D365 screenshot (reference)
+  USAGE.txt                ← this file
+
+
+════════════════════════════════════════════════════════════════════════════════
+  1. HOW TO RUN
+════════════════════════════════════════════════════════════════════════════════
+
+Open directly (simplest)
+  Double-click reach-d365-agents.html. It opens in your default browser.
+  No install, no server, no dependencies.
+
+
+════════════════════════════════════════════════════════════════════════════════
+  2. THE GOLDEN RULE (READ BEFORE DEMOING)
+════════════════════════════════════════════════════════════════════════════════
+
+This is a mockup, not a live application. Every intended interaction shows a
+toast confirmation, opens a real dropdown, expands a real drawer, or updates
+real on-page state. If you click something and NOTHING happens, that element
+is decorative — don't click it in front of the audience again. The lists
+below tell you exactly which are which.
+
+DO click any element listed under "CLICKABLE".
+DO NOT click any element listed under "DO NOT CLICK" during the demo — they
+look interactive but are display-only, and dead clicks break the illusion.
+
+
+════════════════════════════════════════════════════════════════════════════════
+  3. FULL CLICK MAP (organised top-to-bottom)
+════════════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────
+  TOP BLACK BAR
+────────────────────────────────────────
+  CLICKABLE:
+    • Reach logo (yellow SVG)   → decorative brand mark, no action
+    • 9-dot app launcher        → opens 9-app grid (Finance, Sales, Copilot…)
+    • Bookmark icon             → toast "Saved to Favourites"
+    • Search magnifier          → opens search input + suggested chips
+    • Settings gear             → opens Settings panel (5 items)
+    • Bell (red dot)            → opens Notifications panel (4 alerts)
+    • Help ?                    → opens Help panel (Product Tour, Docs, etc.)
+    • IK avatar (blue circle)   → opens user menu
+    • Escape key                → closes any open dropdown
+
+  DO NOT CLICK:
+    • The vertical divider lines
+    • The "Dynamics 365 Business Central" text label
+    • The Cognizant logo (branding only)
+
+────────────────────────────────────────
+  INSIDE THE APP LAUNCHER GRID (after clicking the 9-dot)
+────────────────────────────────────────
+  CLICKABLE: All 9 tiles — each shows a toast:
+    Finance · Sales · Purchasing · Reports · Agents · Admin ·
+    Shopify · Power BI · Copilot
+
+────────────────────────────────────────
+  INSIDE THE SEARCH PANEL
+────────────────────────────────────────
+  CLICKABLE:
+    • Search input box          → type freely, press Enter to trigger toast
+    • Suggestion chips          → click any to auto-fill the box:
+        overdue invoices · creator #4471 · tax filings ·
+        AP exceptions · close status
+
+  DO NOT CLICK:
+    • The hint text below the input
+
+────────────────────────────────────────
+  INSIDE THE NOTIFICATIONS PANEL  (★ demo highlight)
+────────────────────────────────────────
+  CLICKABLE — each of the 4 alerts is a live link:
+    • Tax & Compliance alert    → scrolls to Tax agent + opens its drawer
+    • Collections alert         → scrolls to Collections agent drawer
+    • Royalty alert             → scrolls to Royalty agent drawer
+    • Close & Consolidation     → toast confirmation
+
+────────────────────────────────────────
+  COMPANY / NAV BAR
+────────────────────────────────────────
+  CLICKABLE:
+    • Company name "REACH Finance AI Platform ▾"
+                                → dropdown with 4 entities. Selecting one
+                                  UPDATES THE HEADER TEXT in real time
+    • Personalise icon (⊞)     → toast
+    • Full-screen icon (⛶)     → toast
+    • Any nav tab (Royalties, Collections, Billing & Rebate,
+      Tax & Compliance, Controls) → highlights tab + toast
+    • Hamburger ☰ (last tab)   → toast
+
+  DO NOT CLICK:
+    • The ▾ carets themselves (part of the tab, click the tab label)
+
+────────────────────────────────────────
+  QUICK LINKS BAR
+────────────────────────────────────────
+  CLICKABLE — each link highlights + toasts:
+    All Agents · Active Now · Alerts · Reports · Audit Trail · Agent Config
+
+────────────────────────────────────────
+  HERO SECTION
+────────────────────────────────────────
+  CLICKABLE:
+    • The 3 pagination dots     → each rotates the headline through:
+        (1) "Since yesterday your agents have processed $3.4M…"
+        (2) "This month agents auto-resolved 94% of AP exceptions"
+        (3) "Financial close is on track for Sep 30 target"
+    • ACTIONS PANEL — every item toasts:
+        + Agent Run · + Tax Filing · › Agent Logs
+        + Exception · + Vendor Query · › Dashboard
+        + Rebate · + Close Cycle · › Excel
+
+  DO NOT CLICK:
+    • The "SUMMARY" label
+    • The teal "✓ 0 unreviewed exceptions" sub-line
+
+────────────────────────────────────────
+  ACTIVITIES / KPI CARDS
+────────────────────────────────────────
+  CLICKABLE:
+    • Any of the 4 KPI cards    → toast confirmation
+    • Hover any card            → tooltip appears ("↑12% vs last month",
+                                  "14 accounts flagged", etc.)
+    • The "•••" more icon       → toast
+
+  DO NOT CLICK:
+    • The coloured status bars at the bottom of each card (decorative)
+    • The "Activities ▾" caret
+
+────────────────────────────────────────
+  AGENT TILES  (★ core demo)
+────────────────────────────────────────
+  CLICKABLE — clicking any tile expands a live activity-log drawer:
+    • Royalty & Creator Agent
+    • Collections / Credit Agent
+    • Billing & Rebate Agent
+    • Tax & Compliance Agent
+    • Controls & Access Agent
+    • + Add Agent (grey tile)   → toast "Copilot chat opened"
+    • Scan documents cell       → toast "Opening document scanner…"
+
+  DO NOT CLICK:
+    • The status pills (ACTIVE / PROCESSING / REVIEW) — they animate
+      but are labels, not buttons
+    • The section labels (Revenue Agents, Operations Agents, Governance)
+
+────────────────────────────────────────
+  INSIDE AN OPEN AGENT DRAWER
+────────────────────────────────────────
+  CLICKABLE:
+    • The ✕ in the top right    → closes the drawer
+    • "Ask this agent" input    → type a question, press Enter, or
+    • The blue "Ask" button     → toast "Agent thinking… (demo)"
+
+  DO NOT CLICK:
+    • The individual log-item rows (Done / Flagged badges are labels)
+    • The timestamp column
+
+  NOTE: Clicking a second agent tile auto-closes any previously open drawer.
+
+────────────────────────────────────────
+  END-TO-END PROCESS AGENTS  (3 cards)
+────────────────────────────────────────
+  CLICKABLE:
+    • The entire card body (anywhere on it) → toast opens that workspace
+    • The blue/purple/teal "› Open Agent View" link at the bottom
+    • The "See All (3)" link on the section header
+
+  DO NOT CLICK:
+    • The individual flow-step chips (Invoice Matching, Exception
+      Detection, etc.) — they are visual process markers, not buttons
+    • The italic quote in the middle of each card
+    • The three stat numbers at the bottom of each card
+
+────────────────────────────────────────
+  BUSINESS ASSISTANCE (charts)
+────────────────────────────────────────
+  CLICKABLE:
+    • Donut card "› See All" and "+ Add" links → toasts
+    • Line chart "› See All" and "≡ Filter" links → toasts
+
+  DO NOT CLICK:
+    • The donut chart segments themselves (SVG, not interactive)
+    • The line-chart body, dots, or legend items
+    • The month labels along the x-axis
+
+────────────────────────────────────────
+  FOOTER
+────────────────────────────────────────
+  DO NOT CLICK anything in the footer — it's a branding strip only.
+
+
+════════════════════════════════════════════════════════════════════════════════
+  4. FIVE-MINUTE DEMO SCRIPT (with in-line click cues)
+════════════════════════════════════════════════════════════════════════════════
+
+Below, every action starts with an instruction in [SQUARE BRACKETS]. Anything
+NOT in brackets is your spoken talk-track. Stay off elements listed in the
+"DO NOT CLICK" sections above between cues — silence is fine.
+
+────────────────────────────────────────
+  OPENING (30 seconds) — no clicks yet
+────────────────────────────────────────
+"This is what Dynamics 365 Business Central looks like once we've woven
+REACH's agents into it. Same familiar D365 chrome your finance team already
+knows — but every tile is now an intelligent agent working alongside them.
+Reach on the top left. Cognizant on the top right. Everything in between is
+what a Finance Manager sees at 09:00 on a Monday morning."
+
+
+────────────────────────────────────────
+  ACT 1 — AGENTS ARE ALWAYS ON (60 seconds)
+────────────────────────────────────────
+
+[GESTURE at the hero headline "$3.4M of finance activity"]
+"By the time our controller logged in this morning, agents had already
+processed three-and-a-half million pounds of finance activity overnight.
+Zero unreviewed exceptions. Eight agents online."
+
+[CLICK the 🔔 bell icon in the top-right]
+"They didn't wait for anyone to log in. Four things needed a human's eye
+overnight, and they're queued right here."
+
+[CLICK the top notification — Tax & Compliance Agent]
+"That takes us straight to the responsible agent — the Tax & Compliance
+Agent — and shows exactly what it did, when, and why it flagged for review."
+
+
+────────────────────────────────────────
+  ACT 2 — EACH AGENT IN PLAIN ENGLISH (2 minutes)
+────────────────────────────────────────
+
+[CLICK the ✕ in the drawer to close it, then scroll back up to the tile row]
+"Let's look at the whole team of agents. Five core ones, organised the way
+D365 already organises tiles — Revenue on the left, Operations in the
+middle, Governance on the right."
+
+[POINT at the tiles, reading one italic line aloud from each]
+"Every agent introduces itself in plain English. 'I'm reconciling creator
+royalties against contracts.' 'I'm chasing overdue invoices.' 'I'm
+monitoring tax obligations.' No jargon, no ticket queues."
+
+[CLICK the Royalty & Creator Agent tile]
+"Here's what the Royalty agent did this morning. Twelve statements
+reconciled by 09:42. Two discrepancies flagged on Creator #4471 — the rate
+in the invoice didn't match contract version 2.1. It didn't fix it silently.
+It flagged it and stopped."
+
+[CLICK inside the "Ask this agent" input, TYPE: "Show me royalties for #4471"
+ then press Enter]
+"And when the controller wants more detail, they don't file a ticket. They
+just ask. Natural language, in-line, right where the work is."
+
+[CLICK ✕ to close the Royalty drawer]
+[CLICK the Tax & Compliance Agent tile]
+"Same pattern for every agent. Tax & Compliance shows three VAT returns
+approaching the 30th of September deadline. Draft schedules for corporation
+tax already prepared and in review."
+
+[CLICK ✕ to close]
+
+
+────────────────────────────────────────
+  ACT 3 — END-TO-END, NOT JUST TASKS (90 seconds)
+────────────────────────────────────────
+
+[SCROLL down to "End-to-End Process Agents"]
+"These next three are different. They're not point solutions — each one
+owns a full end-to-end process. Look at the flow across the top of each
+card."
+
+[GESTURE — do NOT click — at the AP Exception flow chips]
+"AP Exception Agent: Invoice Matching, then Exception Detection, then
+Vendor Escalation, then Resolution Tracking. Two-hundred-and-forty-seven
+invoices matched today. Ninety-four percent auto-resolved. Your AP team
+only touches the eight real problems."
+
+[CLICK anywhere on the AP Exception card body]
+"That's what opening the workspace looks like from here."
+
+[Return to the dashboard by clicking the browser back button OR just
+ scroll — the toast confirms the intent]
+
+[GESTURE at the Vendor Query and Close & Consolidation cards without
+ clicking the flow steps]
+"Same shape. Vendor Query Agent answers PO and payment questions from
+vendors twenty-four seven — sixty-three queries today, five escalated.
+Close & Consolidation Agent runs the month-end sequence — six of eight
+entities closed, on track for Sep 30."
+
+
+────────────────────────────────────────
+  CLOSING (30 seconds)
+────────────────────────────────────────
+
+[SCROLL to the Business Assistance charts at the bottom]
+"And this is the operating-model shift, right here."
+
+[POINT at the line chart — do NOT click on it]
+"Blue solid line: actions taken by agents — up and to the right. Purple
+dashed line: manual actions taken by humans — declining. That crossover
+IS the business case for REACH."
+
+[POINT at the donut on the left]
+"And the mix — where agents are spending their time — is now something
+you can steer, not something buried in a ticket queue."
+
+[Optional close]
+"That's the demo. Every button on the top bar works — try the search icon,
+the settings, the entity switcher. Every agent tile expands. Every alert
+in the bell links to the underlying agent. Have a play."
+
+
+════════════════════════════════════════════════════════════════════════════════
+  5. QUICK RECOVERY IF SOMETHING GOES WRONG DURING A DEMO
+════════════════════════════════════════════════════════════════════════════════
+
+  Problem                              Fix
+  ─────────────────────────────────    ─────────────────────────────────
+  A dropdown won't close                Press Escape
+  An agent drawer stuck open            Click the ✕, or refresh the page
+  Layout looks squashed                 Widen the browser to 1400px+
+  Logos don't load                      Check that reach-logo.svg and
+                                        Cognizantlogo.png are both in the
+                                        same folder as the .html
+  Clicked something and nothing         Almost certainly a "DO NOT CLICK"
+    happened                            element — see section 3 above
+  Need to reset the demo state          Refresh the page (Ctrl/Cmd + R)
+
+
+════════════════════════════════════════════════════════════════════════════════
+  6. CUSTOMISING THE DEMO
+════════════════════════════════════════════════════════════════════════════════
+
+Everything is inline HTML/CSS/JS in the single file — no build step.
+
+  To change...                         Edit these blocks in the .html
+  ─────────────────────────────────    ─────────────────────────────────
+  Agent names / layman descriptions    .agent-tile-name / .agent-tile-layman
+  Activity log entries                 <div class="agent-drawer" ...>
+  Hero rotating headlines              JavaScript setDot() headlines array
+  Notification alerts                  #notifPanel block
+  KPI numbers / colours                .kpi-card / .kpi-value
+  Donut / line chart values            Inline <svg> in the .biz-row block
+  Colours                              Teal #008272 · Blue #0078d4 ·
+                                       Alert red #a4262c
+
+
+════════════════════════════════════════════════════════════════════════════════
+  7. KNOWN CAVEATS
+════════════════════════════════════════════════════════════════════════════════
+
+  • All buttons are cosmetic — no real backend. Every intended click
+    surfaces a toast so you know it registered.
+  • Charts are static SVG for reliability during offline demos.
+  • "Ask this agent" accepts any text but doesn't call an LLM — swap
+    the onkeydown handler if wiring to a real endpoint.
+  • Optimised for Chrome, Edge, and Safari at 1440px+ width.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  REACH Finance AI Platform · Built by Cognizant with Claude AI · 2026
+────────────────────────────────────────────────────────────────────────────────
