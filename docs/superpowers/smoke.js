@@ -14,6 +14,18 @@ function visible(id) { const e = doc.getElementById(id); return e && !e.hidden; 
 (async () => {
   window.dispatchEvent(new window.Event('DOMContentLoaded'));
 
+  // --- password lock ---
+  check('app starts locked', doc.body.classList.contains('locked'));
+  check('lock screen present', !!doc.getElementById('lockScreen'));
+  doc.getElementById('lockInput').value = 'wrong-password';
+  window.tryUnlock({ preventDefault(){} });
+  check('wrong password stays locked', doc.body.classList.contains('locked'));
+  check('wrong password shows error', !doc.getElementById('lockError').hidden);
+  doc.getElementById('lockInput').value = 'C0gn1z4nt';
+  window.tryUnlock({ preventDefault(){} });
+  check('correct password unlocks', !doc.body.classList.contains('locked'));
+  check('unlock persisted to sessionStorage', window.sessionStorage.getItem('aurelius-unlocked') === '1');
+
   check('dashboard default visible', visible('view-dashboard'));
   check('dashboard orchestration KPIs', doc.getElementById('au-dash-extra') && doc.getElementById('au-dash-extra').textContent.includes('Transactions Orchestrated'));
   check('dashboard donut svg', doc.querySelectorAll('#au-dash-extra svg').length >= 2);

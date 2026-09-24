@@ -21,6 +21,30 @@
   .view[hidden] { display: none; }
   .view-root { display: block; }
 
+  /* ═══════ Password lock ═══════ */
+  body.locked { overflow: hidden; }
+  body.locked .top-bar, body.locked .nav-bar, body.locked .quick-links,
+  body.locked .view, body.locked .page-footer { display: none !important; }
+  .lock-screen { position: fixed; inset: 0; z-index: 9999; display: flex;
+    align-items: center; justify-content: center; background: #201f1e;
+    background-image: radial-gradient(circle at 30% 20%, #323130, #201f1e 70%); }
+  body:not(.locked) .lock-screen { display: none; }
+  .lock-card { background: #fff; border-radius: 8px; padding: 40px 44px; width: 380px;
+    text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.45); }
+  .lock-logo { height: 34px; width: auto; margin-bottom: 18px; }
+  .lock-title { font-size: 18px; font-weight: 600; color: #201f1e; }
+  .lock-sub { font-size: 12px; color: #605e5c; margin: 4px 0 22px; }
+  .lock-form { display: flex; flex-direction: column; gap: 10px; }
+  .lock-input { padding: 11px 12px; font-size: 14px; border: 1px solid #c8c6c4;
+    border-radius: 4px; outline: none; }
+  .lock-input:focus { border-color: #0f6cbd; box-shadow: 0 0 0 2px rgba(15,108,189,0.2); }
+  .lock-btn { padding: 11px 12px; font-size: 14px; font-weight: 600; color: #fff;
+    background: #0f6cbd; border: none; border-radius: 4px; cursor: pointer; }
+  .lock-btn:hover { background: #115ea3; }
+  .lock-error { color: #a4262c; font-size: 12px; margin-top: 12px; }
+  .lock-foot { margin-top: 24px; padding-top: 16px; border-top: 1px solid #edebe9; }
+  .lock-cogni { height: 20px; width: auto; opacity: 0.85; }
+
   /* ═══════ Aurelius layer — design tokens ═══════ */
   :root {
     --au-bg:#faf9f8; --au-surface:#fff; --au-border:#edebe9; --au-text:#201f1e;
@@ -1164,7 +1188,22 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- ═══════════ PASSWORD LOCK ═══════════ -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-card">
+    <img src="reach-logo.svg" alt="Reach" class="lock-logo">
+    <div class="lock-title">REACH Finance AI Platform</div>
+    <div class="lock-sub">D365 Business Central · Aurelius Agentic Layer</div>
+    <form class="lock-form" id="lockForm" onsubmit="return tryUnlock(event)">
+      <input type="password" id="lockInput" class="lock-input" placeholder="Enter access password" autocomplete="off" autofocus>
+      <button type="submit" class="lock-btn">Unlock</button>
+    </form>
+    <div class="lock-error" id="lockError" hidden>Incorrect password. Please try again.</div>
+    <div class="lock-foot"><img src="Cognizantlogo.png" alt="Cognizant" class="lock-cogni"></div>
+  </div>
+</div>
 
 <!-- Backdrop -->
 <div class="backdrop" id="backdrop" onclick="closeAllDropdowns()"></div>
@@ -2102,7 +2141,37 @@ function renderRoute() {
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', renderRoute);
-window.addEventListener('DOMContentLoaded', function () { initTheme(); renderRoute(); });
+window.addEventListener('DOMContentLoaded', function () { initTheme(); initLock(); renderRoute(); });
+
+/* ═════════ Password lock (client-side demo gate — not real security) ═════════ */
+/* Obfuscated so the literal password isn't in plain sight; note that any
+   client-side gate is bypassable by reading the page source. */
+const LOCK_KEY = 'aurelius-unlocked';
+const LOCK_HASH = atob('QzBnbjF6NG50'); // "C0gn1z4nt"
+function initLock() {
+  let unlocked = false;
+  try { unlocked = sessionStorage.getItem(LOCK_KEY) === '1'; } catch (e) {}
+  if (unlocked) unlockApp();
+  else { document.body.classList.add('locked'); const i = document.getElementById('lockInput'); if (i) i.focus(); }
+}
+function unlockApp() {
+  document.body.classList.remove('locked');
+  const s = document.getElementById('lockScreen'); if (s) s.style.display = 'none';
+}
+function tryUnlock(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById('lockInput');
+  const err = document.getElementById('lockError');
+  if (input && input.value === LOCK_HASH) {
+    try { sessionStorage.setItem(LOCK_KEY, '1'); } catch (ex) {}
+    unlockApp();
+    if (typeof toast === 'function') toast('Welcome to REACH Finance AI Platform');
+  } else {
+    if (err) err.hidden = false;
+    if (input) { input.value = ''; input.focus(); }
+  }
+  return false;
+}
 
 /* ═════════ Dashboard renderer (Task 4) ═════════ */
 function renderDashboard() {
