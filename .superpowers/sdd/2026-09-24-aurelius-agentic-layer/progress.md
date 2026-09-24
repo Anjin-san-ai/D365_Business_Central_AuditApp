@@ -12,3 +12,4 @@ Task 6: complete (orchestrator pipeline + classify + audit persist; smoke: class
 Task 7: complete (BC Explorer tabs/filter/empty-state; smoke pass)
 Task 8: complete (Audit Log search/empty-state/live append; smoke pass)
 tests: node smoke.js (jsdom) -> 30/30 pass; node --check combined -> OK
+Task 9: complete (commit 65a9512; config JSON+YAML valid, local serve HTTP 200)

@@ -83,6 +83,29 @@ function visible(id) { const e = doc.getElementById(id); return e && !e.hidden; 
   window.toggleTheme();
   check('theme back to light', doc.documentElement.dataset.theme === 'light');
 
+  // --- review fixes ---
+  // Fix A: empty Send must not append a junk audit row
+  go('#/audit');
+  const baseAudit = doc.querySelectorAll('#audit-table-host tbody tr').length;
+  go('#/orchestrator');
+  doc.getElementById('orchestrator-chat-input').value = '';
+  doc.getElementById('orchestrator-send-button').click();
+  await wait(3000);
+  go('#/audit');
+  check('empty Send appends no audit row', doc.querySelectorAll('#audit-table-host tbody tr').length === baseAudit);
+
+  // Fix B: free-typed vague query routes coherently (agent matches classification, log lands on that agent)
+  go('#/orchestrator');
+  window.runOrchestrator('please help with something vague and unmatched xyz');
+  await wait(3000);
+  const rtxt = doc.getElementById('orchestrator-result').textContent;
+  check('vague query routes to Vendor Query Assistant', rtxt.includes('Vendor Query Assistant'));
+  check('vague query classified General Inquiry', rtxt.includes('General Inquiry'));
+  go('#/agent/vendor');
+  check('vague query logged on the routed (vendor) agent', doc.getElementById('au-agent-log').textContent.includes('vague and unmatched xyz'));
+  go('#/agent/ap');
+  check('vague query NOT logged on AP agent', !doc.getElementById('au-agent-log').textContent.includes('vague and unmatched xyz'));
+
   console.log('\n=== ' + ok + ' passed, ' + fail + ' failed ===');
   process.exit(fail ? 1 : 0);
 })();

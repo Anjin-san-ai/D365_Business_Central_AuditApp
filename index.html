@@ -2210,7 +2210,7 @@ const PROMPT_MAP = [
 ];
 function classifyPrompt(t) {
   const hit = PROMPT_MAP.find(p => p.re.test(t)) ||
-    { agentId:'ap', classification:'General', confidence:0.72, bcAction:'GET /purchaseInvoices' };
+    { agentId:'vendor', classification:'General Inquiry', confidence:0.72, bcAction:'GET /vendorPayments · triaged' };
   return Object.assign({}, hit, { result:`Routed to ${DATA.agents[hit.agentId].name}. ${hit.bcAction}.` });
 }
 const ORCH_PROMPTS = [
@@ -2228,7 +2228,7 @@ function renderOrchestrator() {
   root.appendChild(el('div', { class:'au-muted', style:'margin-bottom:12px' }, 'Aurelius-Router v2.4 · classifies a request, routes it to the right agent, runs a Business Central workflow, and writes an audit record.'));
 
   const input = el('input', { class:'au-input', id:'orchestrator-chat-input', type:'text', placeholder:'Ask the orchestrator…' });
-  const send = el('button', { class:'au-btn primary', id:'orchestrator-send-button', onclick:() => runOrchestrator(input.value.trim() || input.placeholder) }, 'Send');
+  const send = el('button', { class:'au-btn primary', id:'orchestrator-send-button', onclick:() => { const v = input.value.trim(); if (!v) { toast('Enter a request for the orchestrator'); return; } runOrchestrator(v); } }, 'Send');
   root.appendChild(el('div', { class:'au-tool-row' }, input, send));
 
   const chips = el('div', { class:'au-chips' });
