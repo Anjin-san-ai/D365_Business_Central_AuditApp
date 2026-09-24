@@ -13,9 +13,14 @@ Target repo: `https://github.com/Anjin-san-ai/D365_Business_Central_AuditApp.git
 | `index.html` | The whole app (markup + CSS + JS). Served at `/`. |
 | `reach-logo.svg`, `Cognizantlogo.png`, `Picture1.png` | Brand/reference assets. |
 | `staticwebapp.config.json` | SPA fallback so hash routes (`#/orchestrator`, `#/erp`, `#/audit`, `#/agent/<id>`) and hard refresh resolve to `index.html`. |
-| `.github/workflows/azure-static-web-apps.yml` | Deploy on push to `main` (Oryx build skipped — `skip_app_build: true`). |
+| `.github/workflows/azure-static-web-apps-*.yml` | Azure-generated deploy workflow (created when the SWA resource was linked to this repo). Deploys on push to `main`; wired to its own token secret. |
 
-## Two manual steps (yours to run)
+> **Status:** the Static Web App resource has already been linked to this repo, so Azure
+> committed its own workflow (`azure-static-web-apps-<name>.yml`) with the deployment-token
+> secret already configured. The manual steps below are only needed if you re-create the
+> resource from scratch.
+
+## Two manual steps (only if re-creating the SWA resource)
 
 ### 1. Create the Static Web App and copy its deployment token
 
